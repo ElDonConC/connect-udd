@@ -1,6 +1,6 @@
 # ConectaU - Prototipo de Intervención Psicológica Gamificada
 
-Aplicación web responsive que promueve el **sentido de pertenencia** en estudiantes de primer año de la Universidad del Desarrollo (UDD) mediante misiones sociales breves y progresivas.
+Aplicación web responsive que promueve el **sentido de pertenencia** en estudiantes de primer año de la Universidad del Desarrollo (UDD) mediante misiones sociales, gamificación interactiva, mini-juegos y un sistema de recompensas.
 
 > Conecta · Participa · Pertenece
 
@@ -12,13 +12,19 @@ Proyecto académico del curso *Herramientas Tecnológicas, Innovación y Creativ
 
 ## ✨ Funcionalidades
 
-- **Misiones Diarias**: tareas sociales con recompensas de XP (Rompehielos, Voz activa, etc.).
+- **Misiones diarias rotativas**: 3 retos sociales frescos cada día, generados por hash de fecha.
+- **Sistema de niveles**: 500 XP por nivel, con modal de celebración y nombres por rango (Novato → Campeón).
 - **Escáner QR simulado**: explora el campus y descubre logros aleatorios.
-- **Sistema de niveles**: 500 XP por nivel, con modal de celebración y nombres por rango (Novato → Líder).
+- **Ruleta de la Suerte**: gira para ganar 30-150 XP aleatorios (una vez al día).
+- **Quiz Social**: 6 preguntas de pertenencia universitaria, hasta +120 XP.
+- **Ranking semanal**: tabla de competencia con amigos y tu posición, barras animadas.
+- **Tienda de recompensas**: canjea XP por premios digitales (temas, insignias, coronas).
+- **Avatar personalizable**: elige tu emoji y color de perfil.
+- **Gráfico semanal**: barras de actividad de 7 días que crecen en tiempo real.
+- **Sistema de logros**: 4 medallas desbloqueables (Social, Explora, Voz Alta, Misterio).
+- **Efectos de sonido**: Web Audio API con tonos para éxito, errores, monedas y celebraciones.
+- **Onboarding**: guía de bienvenida de 3 pasos al abrir la app por primera vez.
 - **Racha diaria**: contador de días consecutivos activos.
-- **Sorpresa Social**: minijuego de recompensa aleatoria.
-- **Perfil**: avatar, logros, medallas y estadísticas en vivo.
-- **Confeti animado** y feedback visual al completar misiones.
 - **Persistencia local**: el progreso se guarda en el navegador (localStorage).
 - **Responsive**: funciona en móvil, tablet y escritorio.
 
@@ -32,8 +38,8 @@ Publicada en GitHub Pages:
 ## 🛠️ Tecnologías
 
 - HTML5
-- CSS3 (variables, flexbox, grid, media queries, animaciones)
-- JavaScript (sin dependencias externas)
+- CSS3 (variables, flexbox, grid, media queries, animaciones, conic-gradient)
+- JavaScript (sin dependencias externas, Web Audio API, localStorage)
 
 ## 📂 Estructura
 
