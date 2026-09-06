@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusConnect - Prototipo</title>
+    <title>ConectaU - Universidad del Desarrollo</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         
         :root {
             --primary: #48C9B0;
@@ -15,7 +15,7 @@
             --accent: #FF7F50;
             --warning: #FFD166;
             --text-primary: #2B3A42;
-            --text-secondary: #7A8B94;
+            --text-secondary: #6c7f8a;
         }
 
         * {
@@ -98,35 +98,6 @@
         }
 
         .screen {
-            position: relative;
-            z-index: 1;
-        }
-
-        @media (min-width: 481px) {
-            body {
-                align-items: flex-start;
-            }
-            .app-container {
-                border-radius: 0;
-                box-shadow: none;
-                max-width: 100%;
-            }
-        }
-
-        @media (min-width: 769px) {
-            .app-container {
-                max-width: 480px;
-                min-height: 100vh;
-                min-height: 100dvh;
-                border-radius: 28px;
-                box-shadow: 0 30px 60px rgba(0,0,0,0.35);
-                margin: 24px auto;
-                border: 1px solid rgba(255,255,255,0.15);
-            }
-        }
-
-        /* Screens */
-        .screen {
             position: absolute;
             top: 0;
             left: 0;
@@ -136,11 +107,46 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
+            z-index: 1;
         }
         
         .screen.active {
             opacity: 1;
             pointer-events: auto;
+        }
+
+        /* ===== Generic panels on dark bg ===== */
+        .panel {
+            padding: 24px;
+        }
+        .panel-title {
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .panel-sub {
+            color: rgba(255,255,255,0.65);
+            font-size: 13px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .card-dark {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+        .card-dark h3 {
+            color: #ffffff;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        .card-dark p {
+            color: rgba(255,255,255,0.65);
+            font-size: 12px;
+            line-height: 1.5;
         }
 
         /* UDD Brand Bar */
@@ -149,7 +155,7 @@
             align-items: center;
             gap: 12px;
             background-color: var(--surface);
-            padding: 16px 24px;
+            padding: 14px 20px;
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
@@ -165,12 +171,15 @@
             display: flex;
             flex-direction: column;
             line-height: 1.2;
+            flex: 1;
+            min-width: 0;
         }
 
         .brand-text strong {
             font-size: 15px;
             color: var(--text-primary);
             letter-spacing: 0.3px;
+            white-space: nowrap;
         }
 
         .brand-text span {
@@ -181,10 +190,23 @@
             letter-spacing: 1px;
         }
 
-        /* Dashboard Header */
+        .sound-toggle {
+            border: none;
+            background: var(--background);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform 0.2s;
+        }
+        .sound-toggle:hover { transform: scale(1.1); }
+
+        /* Header */
         .header {
             background: linear-gradient(135deg, var(--surface) 0%, #ecfbf8 100%);
-            padding: 32px 24px 28px;
+            padding: 30px 24px 24px;
             border-bottom-left-radius: 30px;
             border-bottom-right-radius: 30px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.03);
@@ -199,7 +221,7 @@
         }
 
         .header h1 {
-            font-size: 26px;
+            font-size: 25px;
             color: var(--text-primary);
             margin-bottom: 4px;
         }
@@ -219,13 +241,11 @@
 
         .header p {
             color: var(--text-secondary);
-            font-size: 16px;
-            margin-bottom: 24px;
+            font-size: 15px;
+            margin-bottom: 22px;
         }
 
-        .xp-container {
-            margin-top: 10px;
-        }
+        .xp-container { margin-top: 10px; }
 
         .xp-header {
             display: flex;
@@ -252,22 +272,41 @@
             transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Missions */
-        .missions-section {
-            padding: 24px;
+        .streak-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,209,102,0.25);
+            color: #b8860b;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-top: 12px;
         }
 
+        /* ===== Daily missions ===== */
+        .missions-section { padding: 24px; }
+
         .missions-title {
-            font-size: 22px;
+            font-size: 21px;
             color: #ffffff;
             margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .missions-title small {
+            font-size: 12px;
+            color: rgba(255,255,255,0.55);
+            font-weight: 400;
         }
 
         .mission-card {
             background: var(--surface);
             border-radius: 20px;
             padding: 16px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
@@ -292,6 +331,7 @@
             font-size: 24px;
             color: var(--warning);
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         .mission-card.completed .mission-icon {
@@ -299,9 +339,7 @@
             color: white;
         }
 
-        .mission-info {
-            flex: 1;
-        }
+        .mission-info { flex: 1; min-width: 0; }
 
         .mission-info h3 {
             font-size: 16px;
@@ -339,6 +377,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
+            flex-shrink: 0;
         }
         
         .btn-complete:hover {
@@ -346,34 +385,225 @@
             background-color: #3ba993;
         }
 
-        /* Profile Screen */
-        .profile-container {
-            padding: 40px 24px;
-            text-align: center;
+        /* ===== Mini game cards ===== */
+        .mini-cards { margin-top: 20px; }
+        .mini-title { color:#fff; font-size:18px; font-weight:700; margin-bottom:14px; }
+
+        .bonus-card {
+            background: linear-gradient(135deg, var(--accent), #ff9a6b);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(255,127,80,0.35);
+            animation: bonuspulse 2s ease-in-out infinite;
         }
+
+        .quiz-card {
+            background: linear-gradient(135deg, #1f7d74, var(--primary));
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(72,201,176,0.3);
+        }
+
+        @keyframes bonuspulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .mini-icon {
+            font-size: 32px;
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .mini-info { flex: 1; }
+        .mini-info h3 { font-size: 17px; margin-bottom: 4px; }
+        .mini-info p { font-size: 13px; opacity: 0.92; }
+        .mini-xp { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 4px; margin-top: 6px; }
+
+        .btn-mini {
+            background: white;
+            color: #222;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            transition: transform 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .btn-mini:hover { transform: scale(1.05); }
+
+        .btn-mini.dark { background:#141a33; color:#fff; }
+
+        /* ===== Weekly progress ===== */
+        .chart-wrap { margin-top: 6px; }
+        .chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 120px;
+            margin-top: 14px;
+        }
+        .chart-bar-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+        }
+        .chart-val { color: var(--primary-light); font-size: 10px; font-weight: 600; margin-bottom: 4px; }
+        .chart-bar {
+            width: 100%;
+            max-width: 26px;
+            border-radius: 6px 6px 2px 2px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light));
+            min-height: 4px;
+            transition: height 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+        .chart-bar.high { background: linear-gradient(180deg, var(--accent), #ff9a6b); }
+        .chart-day { color: rgba(255,255,255,0.6); font-size: 10px; margin-top: 6px; }
+
+        /* ===== Ranking ===== */
+        .rank-player {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .rank-player.me {
+            border-color: var(--primary);
+            box-shadow: 0 0 14px rgba(72,201,176,0.35);
+            background: rgba(72,201,176,0.12);
+        }
+        .rank-pos { font-weight: 800; color: var(--primary-light); font-size: 16px; width: 30px; text-align: center; }
+        .rank-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0;
+        }
+        .rank-info { flex: 1; min-width: 0; }
+        .rank-name { color: #fff; font-weight: 600; font-size: 14px; }
+        .rank-xp { color: rgba(255,255,255,0.6); font-size: 11px; }
+        .rank-bar-bg { height: 6px; border-radius: 4px; background: rgba(255,255,255,0.12); margin-top: 6px; }
+        .rank-bar {
+            height: 100%; border-radius: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            width: 0;
+            transition: width 0.9s cubic-bezier(0.4,0,0.2,1);
+        }
+        .rank-tag { font-size: 10px; padding: 4px 8px; border-radius: 10px; background: var(--warning); color: #7a5b00; font-weight: 700; }
+
+        /* ===== Shop ===== */
+        .shop-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 18px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .shop-item.owned { border-color: var(--primary); background: rgba(72,201,176,0.10); }
+        .shop-icon {
+            font-size: 34px;
+            width: 54px; height: 54px; border-radius: 14px;
+            background: rgba(255,255,255,0.12);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .shop-info { flex: 1; min-width: 0; }
+        .shop-name { color: #fff; font-weight: 600; font-size: 15px; }
+        .shop-desc { color: rgba(255,255,255,0.6); font-size: 12px; }
+        .shop-cost { color: var(--warning); font-weight: 700; font-size: 13px; margin-top: 4px; }
+        .btn-shop {
+            background: var(--primary);
+            color: #fff; border: none;
+            padding: 8px 14px; border-radius: 12px;
+            font-weight: 700; cursor: pointer; font-size: 12px;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+        .btn-shop:hover { transform: scale(1.05); }
+        .btn-shop.owned { background: rgba(255,255,255,0.15); cursor: default; }
+        .btn-shop.poor { background: rgba(255,255,255,0.15); }
+
+        .wallet {
+            background: linear-gradient(135deg, rgba(255,209,102,0.9), #f6c445);
+            color: #7a5b00;
+            border-radius: 16px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        /* ===== Profile ===== */
+        .profile-container { padding: 28px 24px; text-align: center; }
 
         .avatar {
             width: 100px;
             height: 100px;
             background-color: var(--primary-light);
             border-radius: 50%;
-            margin: 0 auto 16px;
+            margin: 0 auto 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 40px;
+            font-size: 44px;
             color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 3px solid rgba(255,255,255,0.15);
         }
+        .avatar:hover { transform: scale(1.06); }
+        .avatar-hint { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 12px; }
 
-        .profile-name {
+        .name-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px dashed rgba(255,255,255,0.3);
             font-size: 24px;
             color: #ffffff;
+            text-align: center;
+            font-weight: 600;
+            width: 100%;
+            max-width: 280px;
+            outline: none;
+            font-family: inherit;
         }
 
         .profile-title {
             color: var(--primary-light);
             font-weight: 600;
-            margin-bottom: 32px;
+            margin-top: 4px;
+            margin-bottom: 26px;
+            font-size: 15px;
         }
 
         .section-title {
@@ -383,48 +613,25 @@
             margin-bottom: 16px;
         }
 
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 32px;
-        }
+        .achievements-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
 
-        .badge-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .badge-col { display: flex; flex-direction: column; align-items: center; }
 
         .badge {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
+            width: 56px; height: 56px; border-radius: 50%;
             background-color: rgba(255, 209, 102, 0.2);
             border: 2px solid var(--warning);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            margin-bottom: 8px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; margin-bottom: 8px;
+            transition: all 0.4s ease;
+            filter: grayscale(1) brightness(0.6);
         }
+        .badge.unlocked { filter: none; box-shadow: 0 0 14px rgba(255,209,102,0.5); }
 
-        .badge.locked {
-            background-color: var(--background);
-            border-color: #ddd;
-            color: #aaa;
-        }
+        .badge.locked { background-color: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); color: #aaa; }
 
-        .badge-col span {
-            font-size: 12px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-        
-        .badge.locked + span {
-            color: rgba(255,255,255,0.5);
-            font-weight: normal;
-        }
+        .badge-col span { font-size: 12px; font-weight: 600; color: #ffffff; }
+        .badge.locked + span { color: rgba(255,255,255,0.5); font-weight: normal; }
 
         .stats-row {
             display: flex;
@@ -435,88 +642,23 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
 
-        .stat-item {
-            text-align: center;
-        }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 24px; font-weight: bold; color: var(--text-primary); }
+        .stat-label { font-size: 12px; color: var(--text-secondary); }
 
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--text-primary);
-        }
-
-        .stat-label {
+        .replay-link {
+            display: inline-block;
+            margin-top: 16px;
+            color: rgba(255,255,255,0.6);
             font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* Bottom Nav */
-        .bottom-nav {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 80px;
-            background-color: var(--surface);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
-            border-bottom-left-radius: 32px;
-            border-bottom-right-radius: 32px;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-secondary);
-            text-decoration: none;
-            opacity: 0.5;
-            transition: all 0.3s;
+            text-decoration: underline;
             cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
         }
 
-        .nav-item.active {
-            color: var(--primary);
-            opacity: 1;
-        }
-
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 4px;
-            fill: currentColor;
-        }
-        
-        .nav-item span {
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        /* Toast */
-        .toast {
-            position: absolute;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background-color: var(--accent);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(255, 127, 80, 0.4);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 10;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* Scanner Screen */
+        /* ===== Scanner ===== */
         .scanner-screen {
             background-color: #1a1a1a;
             height: 100%;
@@ -524,7 +666,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 60px 24px;
+            padding: 50px 24px;
             color: white;
         }
 
@@ -543,9 +685,7 @@
             transition: transform 0.2s;
         }
         
-        .scanner-box:active {
-            transform: scale(0.95);
-        }
+        .scanner-box:active { transform: scale(0.95); }
         
         .scanner-line {
             width: 100%;
@@ -562,126 +702,64 @@
             50% { top: 100%; }
             100% { top: 0; }
         }
-        
-        /* Responsive: Tablet+ */
-        @media (min-width: 481px) {
-            .header {
-                padding: 32px 32px 24px;
-            }
-            .missions-section {
-                padding: 24px 32px;
-            }
-            .profile-container {
-                padding: 40px 32px;
-            }
-        }
 
-        /* Responsive: Large phones / small tablets */
-        @media (min-width: 360px) and (max-width: 480px) {
-            .header h1 {
-                font-size: 24px;
-            }
-            .achievements-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 8px;
-            }
-            .badge {
-                width: 48px;
-                height: 48px;
-                font-size: 20px;
-            }
-        }
-
-        /* Responsive: Small phones */
-        @media (max-width: 359px) {
-            .header h1 {
-                font-size: 20px;
-            }
-            .missions-title {
-                font-size: 18px;
-            }
-            .mission-card {
-                padding: 12px;
-                flex-wrap: wrap;
-            }
-            .mission-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 20px;
-                margin-right: 12px;
-            }
-            .btn-complete {
-                margin-top: 8px;
-                width: 100%;
-                text-align: center;
-            }
-            .achievements-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .stats-row {
-                flex-direction: column;
-                gap: 12px;
-            }
-            div[style*="width: 1px"] {
-                display: none;
-            }
-            .scanner-box {
-                width: 200px;
-                height: 200px;
-            }
-        }
-
-        /* Bonus Mission Card */
-        .bonus-card {
-            background: linear-gradient(135deg, var(--accent), #ff9a6b);
-            border-radius: 20px;
-            padding: 18px;
-            margin-top: 24px;
+        /* ===== Bottom Nav (5 items) ===== */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80px;
+            background-color: var(--surface);
             display: flex;
+            justify-content: space-around;
             align-items: center;
-            gap: 16px;
-            color: white;
-            box-shadow: 0 8px 20px rgba(255,127,80,0.35);
-            animation: bonuspulse 2s ease-in-out infinite;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+            border-top-left-radius: 22px;
+            border-top-right-radius: 22px;
+            z-index: 5;
         }
 
-        @keyframes bonuspulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
-        .bonus-icon {
-            font-size: 34px;
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            background: rgba(255,255,255,0.25);
+        .nav-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .bonus-info { flex: 1; }
-        .bonus-info h3 { font-size: 17px; margin-bottom: 4px; }
-        .bonus-info p { font-size: 13px; opacity: 0.92; }
-        .bonus-xp { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 4px; margin-top: 6px; }
-
-        .btn-bonus {
-            background: white;
-            color: var(--accent);
-            border: none;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-weight: 700;
+            color: var(--text-secondary);
+            text-decoration: none;
+            opacity: 0.5;
+            transition: all 0.3s;
             cursor: pointer;
-            font-size: 13px;
-            transition: transform 0.2s;
-            white-space: nowrap;
+            gap: 2px;
         }
-        .btn-bonus:hover { transform: scale(1.05); }
 
-        /* Level Up Modal */
+        .nav-item.active { color: var(--primary); opacity: 1; transform: translateY(-2px); }
+
+        .nav-item svg { width: 22px; height: 22px; margin-bottom: 2px; fill: currentColor; }
+        
+        .nav-item span { font-size: 10px; font-weight: 600; }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(255, 127, 80, 0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10;
+            max-width: 88%;
+            text-align: center;
+        }
+
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ===== Modals ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -694,12 +772,12 @@
         }
         .modal-overlay.show { display: flex; }
 
-        .levelup-modal {
-            background: linear-gradient(160deg, #fff 0%, #eafaf7 100%);
+        .levelup-modal, .quiz-modal, .avatar-modal, .roulette-modal {
+            background: linear-gradient(160deg, #ffffff 0%, #eafaf7 100%);
             border-radius: 28px;
-            padding: 32px 24px;
-            width: 320px;
-            max-width: 88%;
+            padding: 28px 24px;
+            width: 340px;
+            max-width: 90%;
             text-align: center;
             box-shadow: 0 25px 60px rgba(0,0,0,0.4);
             animation: popin 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -716,9 +794,9 @@
             50% { transform: translateY(-10px); }
         }
 
-        .levelup-modal h2 { font-size: 26px; color: var(--text-primary); margin: 8px 0; }
+        .levelup-modal h2, .quiz-modal h2, .avatar-modal h2, .roulette-modal h2 { font-size: 24px; color: var(--text-primary); margin: 8px 0; }
         .levelup-modal .lv { font-size: 18px; color: var(--primary); font-weight: 700; margin-bottom: 4px; }
-        .levelup-modal p { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; }
+        .levelup-modal p, .avatar-modal p { color: var(--text-secondary); font-size: 14px; margin-bottom: 18px; }
 
         .btn-modal {
             width: 100%;
@@ -732,9 +810,91 @@
             cursor: pointer;
             transition: transform 0.2s;
         }
-        .btn-modal:hover { transform: scale(1.03); }
+        .btn-modal:hover { transform: scale(1.02); }
 
-        /* Confetti */
+        /* Quiz */
+        .quiz-question { font-size: 17px; font-weight: 700; color: var(--text-primary); margin: 14px 0 16px; line-height: 1.4; min-height: 50px; }
+        .quiz-opt {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: var(--background);
+            border: 2px solid transparent;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .quiz-opt:hover { border-color: var(--primary); }
+        .quiz-opt.correct { background: #d8f5ec; border-color: var(--primary); }
+        .quiz-opt.wrong { background: #ffe3da; border-color: var(--accent); color: #a6422a; }
+        .quiz-opt:disabled { cursor: default; }
+        .quiz-msg { font-size: 13px; font-weight: 600; margin: 4px 0 12px; min-height: 18px; }
+        .quiz-progress { font-size: 11px; color: var(--text-secondary); margin-bottom: 6px; }
+        .btn-next { background: var(--accent); }
+        .btn-next.hidden { display: none; }
+
+        /* Roulette */
+        .wheel-wrap { position: relative; width: 200px; height: 200px; margin: 10px auto 20px; }
+        .wheel {
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            border: 6px solid #fff;
+            box-shadow: 0 0 0 4px rgba(0,0,0,0.15), 0 10px 30px rgba(0,0,0,0.25);
+            transition: transform 2.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+            position: relative;
+        }
+        .wheel::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 14px; height: 14px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%,-50%);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .wheel-pointer {
+            position: absolute;
+            top: -10px; left: 50%;
+            transform: translateX(-50%);
+            font-size: 26px;
+            color: var(--accent);
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .roulette-result {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--accent);
+            min-height: 24px;
+            margin-bottom: 10px;
+        }
+        .btn-spin { background: var(--accent); }
+        .btn-spin:disabled { opacity: 0.5; cursor: default; }
+
+        /* Avatar picker */
+        .avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+        .avatar-opt {
+            font-size: 28px;
+            background: var(--background);
+            border: 2px solid transparent;
+            border-radius: 14px;
+            padding: 10px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .avatar-opt:hover, .avatar-opt.sel { border-color: var(--primary); background: #e0f8f3; }
+        .color-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 18px; }
+        .color-opt { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
+        .color-opt.sel { border-color: #333; transform: scale(1.12); }
+
+        /* ===== Confetti ===== */
         .confetti-piece {
             position: fixed;
             top: -20px;
@@ -750,31 +910,13 @@
             100% { transform: translateY(105vh) rotate(720deg); opacity: 0.6; }
         }
 
-        /* Mission complete pop animation */
-        .mission-card.pop {
-            animation: missionpop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
+        .mission-card.pop { animation: missionpop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
         @keyframes missionpop {
             0% { transform: scale(1); }
             40% { transform: scale(1.06); }
             100% { transform: scale(1); }
         }
 
-        /* Streak badge in header */
-        .streak-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: rgba(255,209,102,0.25);
-            color: #b8860b;
-            font-weight: 700;
-            font-size: 13px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            margin-top: 12px;
-        }
-
-        /* Reward feedback on XP */
         .xp-gain {
             position: absolute;
             font-weight: 800;
@@ -789,25 +931,104 @@
             100% { transform: translateY(-40px); opacity: 0; }
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
+        /* ===== Onboarding ===== */
+        .onboarding {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(160deg, #141a33 0%, #1c2a52 45%, #173b3a 100%);
+            color: #fff;
+            text-align: center;
+            padding: 0 32px;
         }
-        ::-webkit-scrollbar-track {
-            background: transparent;
+        .onboarding.show { display: flex; }
+
+        .ob-slide { animation: obfade 0.5s ease; max-width: 320px; }
+        @keyframes obfade {
+            0% { opacity: 0; transform: translateY(16px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.1);
-            border-radius: 10px;
+        .ob-emoji { font-size: 80px; margin-bottom: 18px; animation: bounce 1.2s infinite; }
+        .ob-title { font-size: 26px; font-weight: 800; color: var(--primary-light); margin-bottom: 10px; }
+        .ob-text { color: rgba(255,255,255,0.8); font-size: 15px; line-height: 1.7; }
+        .ob-features { margin-top: 22px; text-align: left; }
+        .ob-feature { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 14px; color: rgba(255,255,255,0.85); }
+        .ob-feature .ob-icon { width: 32px; height: 32px; border-radius: 10px; background: rgba(72,201,176,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+        .ob-dots { display: flex; gap: 8px; margin: 26px 0; }
+        .ob-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: all 0.3s; }
+        .ob-dot.active { background: var(--primary); width: 22px; border-radius: 6px; }
+
+        .btn-ob {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            width: 100%;
+            max-width: 280px;
+            padding: 15px;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-ob:hover { transform: scale(1.03); }
+        .ob-brand { display: flex; align-items: center; gap: 10px; position: absolute; top: 40px; }
+        .ob-brand img { height: 32px; width: auto; }
+        .ob-brand span { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.75); }
+
+        /* Responsive */
+        @media (min-width: 481px) {
+            body { align-items: flex-start; }
+            .app-container { border-radius: 0; box-shadow: none; max-width: 100%; }
         }
 
+        @media (min-width: 769px) {
+            .app-container {
+                max-width: 480px;
+                min-height: 100vh;
+                min-height: 100dvh;
+                border-radius: 28px;
+                box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+                margin: 24px auto;
+                border: 1px solid rgba(255,255,255,0.15);
+            }
+        }
+
+        /* Responsive: Large phones */
+        @media (min-width: 360px) and (max-width: 480px) {
+            .header h1 { font-size: 24px; }
+            .achievements-grid { gap: 8px; }
+            .badge { width: 48px; height: 48px; font-size: 20px; }
+        }
+
+        /* Responsive: Small phones */
+        @media (max-width: 359px) {
+            .header h1 { font-size: 20px; }
+            .missions-title { font-size: 18px; }
+            .mission-card { padding: 12px; flex-wrap: wrap; }
+            .mission-icon { width: 40px; height: 40px; font-size: 20px; margin-right: 12px; }
+            .btn-complete { margin-top: 8px; width: 100%; text-align: center; }
+            .achievements-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-row { flex-direction: column; gap: 12px; }
+            div[style*="width: 1px"] { display: none; }
+            .scanner-box { width: 200px; height: 200px; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        
-        <!-- DASHBOARD SCREEN -->
+
+        <!-- ===== DASHBOARD ===== -->
         <div id="screen-dashboard" class="screen active">
             <div class="brand-bar">
                 <img class="brand-logo" src="psicologia-logo.png" alt="Facultad de Psicología UDD">
@@ -815,12 +1036,13 @@
                     <strong>Universidad del Desarrollo</strong>
                     <span>Facultad de Psicología</span>
                 </div>
+                <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()" title="Sonido">🔊</button>
             </div>
 
             <div class="header">
                 <div class="header-top">
                     <div>
-                        <h1>¡Hola, Estudiante!</h1>
+                        <h1 id="greeting">¡Hola, Estudiante!</h1>
                         <p>¿Listo para salir de tu zona de confort?</p>
                     </div>
                     <span class="header-chip">🛡️ UDD</span>
@@ -838,133 +1060,142 @@
             </div>
 
             <div class="missions-section">
-                <h2 class="missions-title">Misiones Diarias</h2>
-                
-                <div class="mission-card" id="mission-1">
-                    <div class="mission-icon">★</div>
-                    <div class="mission-info">
-                        <h3>Rompehielos</h3>
-                        <p>Saluda a un compañero que se siente a tu lado.</p>
-                        <div class="xp-reward">✨ +50 XP</div>
+                <h2 class="missions-title">📅 Misiones de hoy <small id="today-label"></small></h2>
+                <div id="missions-list"></div>
+
+                <div class="mini-cards">
+                    <h3 class="mini-title">🎮 Desafíos rápidos</h3>
+
+                    <div class="bonus-card">
+                        <div class="mini-icon">🎲</div>
+                        <div class="mini-info">
+                            <h3>Ruleta de la Suerte</h3>
+                            <p>Gira y gana XP extra al azar</p>
+                            <div class="mini-xp">✨ <span id="bonus-status">1 vez al día</span></div>
+                        </div>
+                        <button class="btn-mini dark" onclick="openRoulette()">Girar</button>
                     </div>
-                    <button class="btn-complete" onclick="completeMission(1, 50)">Completar</button>
-                </div>
-                
-                <div class="mission-card completed">
-                    <div class="mission-icon">✓</div>
-                    <div class="mission-info">
-                        <h3>Explorador</h3>
-                        <p>Pregunta por una ubicación en el campus.</p>
-                        <div class="xp-reward">✨ +30 XP</div>
+
+                    <div class="quiz-card">
+                        <div class="mini-icon">🎯</div>
+                        <div class="mini-info">
+                            <h3>Quiz Social</h3>
+                            <p>¿Cuánto conectas con los demás?</p>
+                            <div class="mini-xp">✨ hasta +120 XP</div>
+                        </div>
+                        <button class="btn-mini" onclick="startQuiz()">Jugar</button>
                     </div>
-                </div>
-                
-                <div class="mission-card" id="mission-3">
-                    <div class="mission-icon">★</div>
-                    <div class="mission-info">
-                        <h3>Voz activa</h3>
-                        <p>Haz una pregunta durante la clase.</p>
-                        <div class="xp-reward">✨ +100 XP</div>
-                    </div>
-                    <button class="btn-complete" onclick="completeMission(3, 100)">Completar</button>
                 </div>
 
-                <div class="bonus-card" id="bonus-card">
-                    <div class="bonus-icon">🎲</div>
-                    <div class="bonus-info">
-                        <h3>Sorpresa Social</h3>
-                        <p>Gira la ruleta y gana XP extra</p>
-                        <div class="bonus-xp">✨ <span id="bonus-xp-label">+?? XP</span></div>
-                    </div>
-                    <button class="btn-bonus" onclick="claimBonus()">Girar</button>
+                <div class="card-dark chart-wrap" style="margin-top:20px;">
+                    <h3>📊 Tu actividad esta semana</h3>
+                    <div class="chart" id="week-chart"></div>
                 </div>
             </div>
         </div>
 
-        <!-- SCANNER SCREEN -->
+        <!-- ===== RANKING ===== -->
+        <div id="screen-ranking" class="screen">
+            <div class="panel">
+                <h2 class="panel-title">🏆 Ranking Semanal</h2>
+                <p class="panel-sub">¿Dónde estás esta semana? Suma XP para subir en la tabla.</p>
+                <div id="ranking-list"></div>
+            </div>
+        </div>
+
+        <!-- ===== SCANNER ===== -->
         <div id="screen-scanner" class="screen">
             <div class="scanner-screen">
                 <h2 style="text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-size: 18px; line-height: 1.5;">Escanea códigos QR en el campus<br>para encontrar recompensas.</h2>
-                
-                <!-- Haz click aquí para simular que encontraste uno -->
                 <div class="scanner-box" onclick="simulateScan()">
                     <div class="scanner-line"></div>
                     <div style="color: rgba(255,255,255,0.2); font-size: 80px;">⛶</div>
                 </div>
-                
                 <div style="background: rgba(0,0,0,0.6); padding: 12px 24px; border-radius: 20px; font-size: 14px;">
                     🔍 Buscando... (Haz click al recuadro)
                 </div>
             </div>
         </div>
 
-        <!-- PROFILE SCREEN -->
+        <!-- ===== SHOP ===== -->
+        <div id="screen-shop" class="screen">
+            <div class="panel">
+                <h2 class="panel-title">🛍️ Tienda de Recompensas</h2>
+                <p class="panel-sub">Canjea tu XP por recompensas exclusivas.</p>
+                <div class="wallet">
+                    <span>💰 Mi saldo</span>
+                    <span id="wallet-amount">0 XP</span>
+                </div>
+                <div id="shop-list"></div>
+            </div>
+        </div>
+
+        <!-- ===== PROFILE ===== -->
         <div id="screen-profile" class="screen">
             <div class="profile-container">
-                <div class="avatar">👤</div>
-                <h2 class="profile-name">Carlos Estudiante</h2>
-                <p class="profile-title">Novato Nivel 2</p>
-                
+                <div class="avatar" id="avatar-display" onclick="openAvatarPicker()">👤</div>
+                <div class="avatar-hint">Toca el avatar para cambiarlo</div>
+                <input class="name-input" id="name-input" value="Carlos Estudiante" onchange="saveName(this.value)" maxlength="22">
+                <p class="profile-title" id="profile-title">Novato Nivel 2</p>
+
                 <h3 class="section-title">Logros y Medallas</h3>
-                <div class="achievements-grid">
-                    <div class="badge-col">
-                        <div class="badge">💬</div>
-                        <span>Social</span>
-                    </div>
-                    <div class="badge-col">
-                        <div class="badge">🗺️</div>
-                        <span>Explora</span>
-                    </div>
-                    <div class="badge-col">
-                        <div class="badge">🎤</div>
-                        <span>Voz Alta</span>
-                    </div>
-                    <div class="badge-col">
-                        <div class="badge locked">🔒</div>
-                        <span>???</span>
-                    </div>
+                <div class="achievements-grid" id="achievements-grid"></div>
+
+                <h3 class="section-title">Mi semana</h3>
+                <div class="card-dark" style="margin-bottom:24px;">
+                    <div class="chart" id="week-chart-big"></div>
                 </div>
 
-                <h3 class="section-title">Estadísticas Sociales</h3>
+                <h3 class="section-title">Estadísticas</h3>
                 <div class="stats-row">
                     <div class="stat-item">
-                        <div style="color:var(--primary); font-size: 24px; margin-bottom: 4px;">🚩</div>
-                        <div class="stat-value" id="stat-missions">2</div>
+                        <div style="color:var(--primary); font-size: 22px; margin-bottom: 4px;">🚩</div>
+                        <div class="stat-value" id="stat-missions">1</div>
                         <div class="stat-label">Misiones</div>
                     </div>
                     <div style="width: 1px; background: #eee;"></div>
                     <div class="stat-item">
-                        <div style="color:var(--primary); font-size: 24px; margin-bottom: 4px;">🔥</div>
+                        <div style="color:var(--primary); font-size: 22px; margin-bottom: 4px;">🔥</div>
                         <div class="stat-value" id="stat-streak">3</div>
                         <div class="stat-label">Racha</div>
                     </div>
                     <div style="width: 1px; background: #eee;"></div>
                     <div class="stat-item">
-                        <div style="color:var(--primary); font-size: 24px; margin-bottom: 4px;">👥</div>
-                        <div class="stat-value" id="stat-friends">2</div>
-                        <div class="stat-label">Amigos</div>
+                        <div style="color:var(--primary); font-size: 22px; margin-bottom: 4px;">⭐</div>
+                        <div class="stat-value" id="stat-xp">0</div>
+                        <div class="stat-label">Total XP</div>
                     </div>
                 </div>
+
+                <button class="replay-link" onclick="replayOnboarding()">Ver bienvenida otra vez</button>
             </div>
         </div>
 
-        <!-- BOTTOM NAVIGATION -->
-        <div class="bottom-nav">
-            <div class="nav-item active" onclick="navTo('dashboard', this)">
-                <svg viewBox="0 0 24 24"><path d="M12 2L2 22l10-3 10 3L12 2z"/></svg>
+        <!-- ===== BOTTOM NAV ===== -->
+        <div class="bottom-nav" id="bottom-nav">
+            <div class="nav-item active" data-screen="dashboard" onclick="navTo('dashboard', this)">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm0 9h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1z"/></svg>
                 <span>Misiones</span>
             </div>
-            <div class="nav-item" onclick="navTo('scanner', this)">
-                <svg viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h8v6h-8V3zm2 2v2h4V5h-4zM3 15h6v6H3v-6zm2 2v2h2v-2H5zm8-2h8v6h-8v-6zm2 2v2h4v-2h-4z"/></svg>
+            <div class="nav-item" data-screen="ranking" onclick="navTo('ranking', this)">
+                <svg viewBox="0 0 24 24"><path d="M4 10h4v10H4zM10 4h4v16h-4zM16 13h4v7h-4z"/></svg>
+                <span>Ranking</span>
+            </div>
+            <div class="nav-item" data-screen="scanner" onclick="navTo('scanner', this)">
+                <svg viewBox="0 0 24 24"><path d="M7 4v3H4v4H2V5a1 1 0 0 1 1-1h4zm10 0h4a1 1 0 0 1 1 1v6h-2V7h-3V4zM4 13v3H2v-3h2zm18 0v3h-2v-3h2zM2 17h2v3a1 1 0 0 0 1 1h4v-2H5v-2H2v0zm17 1h-3v2h3v-2z"/></svg>
                 <span>Escanear</span>
             </div>
-            <div class="nav-item" onclick="navTo('profile', this)">
+            <div class="nav-item" data-screen="shop" onclick="navTo('shop', this)">
+                <svg viewBox="0 0 24 24"><path d="M7 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm10 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM6.5 9h14.2l-1.3 7H7.8L5.1 4H2V2h4.4l.5 3H22l-2 9H7.6l-.2-1.5L6.5 9z"/></svg>
+                <span>Tienda</span>
+            </div>
+            <div class="nav-item" data-screen="profile" onclick="navTo('profile', this)">
                 <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 <span>Perfil</span>
             </div>
         </div>
 
-        <!-- TOAST NOTIFICATION -->
+        <!-- TOAST -->
         <div id="toast" class="toast"></div>
 
         <!-- LEVEL UP MODAL -->
@@ -978,169 +1209,225 @@
             </div>
         </div>
 
+        <!-- QUIZ MODAL -->
+        <div class="modal-overlay" id="quiz-overlay">
+            <div class="quiz-modal" style="width:360px;">
+                <h2 style="margin-top:0;">🎯 Quiz Social</h2>
+                <div class="quiz-progress" id="quiz-progress">Pregunta 1 de 6</div>
+                <div class="quiz-question" id="quiz-question"></div>
+                <div id="quiz-opts"></div>
+                <div class="quiz-msg" id="quiz-msg"></div>
+                <button class="btn-modal btn-next hidden" id="quiz-next" onclick="nextQuiz()">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- ROULETTE MODAL -->
+        <div class="modal-overlay" id="roulette-overlay">
+            <div class="roulette-modal" style="width:340px;">
+                <h2 style="margin-top:0;">🎲 Ruleta de la Suerte</h2>
+                <div class="wheel-wrap">
+                    <div class="wheel-pointer">▼</div>
+                    <div class="wheel" id="wheel"></div>
+                </div>
+                <div class="roulette-result" id="roulette-result"></div>
+                <button class="btn-modal btn-spin" id="btn-spin" onclick="spinWheel()">Girar</button>
+            </div>
+        </div>
+
+        <!-- AVATAR PICKER -->
+        <div class="modal-overlay" id="avatar-overlay">
+            <div class="avatar-modal">
+                <h2 style="margin-top:0;">Elige tu avatar</h2>
+                <p>Tu identidad en ConectaU</p>
+                <div class="avatar-grid" id="avatar-grid"></div>
+                <div class="color-row" id="color-row"></div>
+                <button class="btn-modal" onclick="closeAvatarPicker()">Listo</button>
+            </div>
+        </div>
+
+        <!-- ONBOARDING -->
+        <div class="onboarding" id="onboarding">
+            <div class="ob-brand">
+                <img src="psicologia-logo.png" alt="UDD">
+                <span>ConectaU · Fac. Psicología</span>
+            </div>
+
+            <div class="ob-slide" id="ob-slide">
+                <div class="ob-emoji" id="ob-emoji">🚀</div>
+                <div class="ob-title" id="ob-title">¡Bienvenido a ConectaU!</div>
+                <div class="ob-text" id="ob-text">Una app gamificada para que conectes, participes y sientas que perteneces a tu comunidad.</div>
+                <div class="ob-features" id="ob-features">
+                    <div class="ob-feature"><span class="ob-icon">📅</span> Misiones diarias que rotan cada día</div>
+                    <div class="ob-feature"><span class="ob-icon">🏆</span> Ranking semanal y tienda de premios</div>
+                    <div class="ob-feature"><span class="ob-icon">🎲</span> Ruleta, quiz y códigos QR</div>
+                </div>
+            </div>
+
+            <div style="position:absolute; bottom:48px; left:0; right:0; text-align:center; padding:0 32px;">
+                <div class="ob-dots" style="justify-content:center;">
+                    <div class="ob-dot active" id="dot-0"></div>
+                    <div class="ob-dot" id="dot-1"></div>
+                    <div class="ob-dot" id="dot-2"></div>
+                </div>
+                <button class="btn-ob" id="ob-btn" onclick="onboardNext()">Empezar</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
         const TARGET_XP = 500;
-        let currentXp = 150;
-        let level = 2;
-        let streak = 3;
-        let missionsDone = 1;
-        let isScanning = false;
-        let bonusUsed = false;
-        const LEVEL_NAMES = ['','Novato','Explorador','Conector','Atrevido','Líder'];
+        const LEVEL_NAMES = ['', 'Novato', 'Explorador', 'Conector', 'Atrevido', 'Líder', 'Campeón'];
 
-        function loadState() {
+        let currentXp = 150, level = 2, streak = 3, missionsDone = 1, scans = 0;
+        let bonusUsed = false, isScanning = false, audioOn = true;
+        let week = [40, 80, 0, 120, 60, 0, 0];
+        let owned = [];
+        let avatar = { emoji: '👤', color: '#48C9B0' };
+        let name = 'Carlos Estudiante';
+        let daily = {};
+        let quizIndex = 0, quizScore = 0, quizAnswered = false;
+        let rouletteIndex = 0, rouletteSpinning = false, rouletteLast = 0;
+        let onboardingStep = 0;
+
+        const MISSION_POOL = [
+            { t: 'Rompehielos', d: 'Saluda a alguien que no conozcas aún.', xp: 50, icon: '👋' },
+            { t: 'Voz Activa', d: 'Haz una pregunta en clases.', xp: 100, icon: '🎤' },
+            { t: 'Café Conversación', d: 'Invita a alguien a un café.', xp: 60, icon: '☕' },
+            { t: 'Explorador de Campus', d: 'Visita un rincón nuevo de la universidad.', xp: 45, icon: '🗺️' },
+            { t: 'Cumplido Sincero', d: 'Haz un cumplido real a un compañero.', xp: 40, icon: '💬' },
+            { t: 'Grupo de Estudio', d: 'Propón estudiar en grupo.', xp: 80, icon: '📚' },
+            { t: 'Deporte en Equipo', d: 'Invita a jugar un deporte o caminar juntos.', xp: 70, icon: '⚽' },
+            { t: 'Tip Útil', d: 'Comparte un consejo útil con otro estudiante.', xp: 55, icon: '💡' },
+            { t: '3 Sonrisas', d: 'Saluda y sonríe a 3 personas hoy.', xp: 35, icon: '😊' }
+        ];
+
+        const RANK_FRIENDS = [
+            { name: 'Matilda', avatar: '🦋', color: '#6C5CE7', xp: 860 },
+            { name: 'Carolina', avatar: '🌼', color: '#FF7F50', xp: 740 },
+            { name: 'Amanda', avatar: '🌊', color: '#00A8FF', xp: 620 },
+            { name: 'Vicente', avatar: '🚀', color: '#FFD166', xp: 480 }
+        ];
+
+        const SHOP_ITEMS = [
+            { id: 'theme', name: 'Tema Nocturno', desc: 'Interfaz oscura premium', cost: 300, icon: '🌙' },
+            { id: 'stars', name: 'Lluvia de Estrellas', desc: 'Confeti especial al ganar XP', cost: 150, icon: '✨' },
+            { id: 'badge', name: 'Insignia Héroe', desc: 'Aura dorada en tu perfil', cost: 200, icon: '🦸' },
+            { id: 'book', name: 'Pack Estudio', desc: 'Emoji de lectura en tu avatar', cost: 250, icon: '📚' },
+            { id: 'crown', name: 'Corona Real', desc: 'Apareces coronado en el ranking', cost: 400, icon: '👑' }
+        ];
+
+        const QUIZ = [
+            { q: '¿Cuál es la mejor manera de romper el hielo?', opts: ['Saludar y preguntar su nombre', 'Mirar el celular', 'Hablar solo de ti'], ans: 0 },
+            { q: 'El primer día, ¿qué ayuda a conectar?', opts: ['Sentarte solo en un rincón', 'Unirte a un grupo pequeño', 'Evitar mirar a nadie'], ans: 1 },
+            { q: 'Un grupo está conversando, ¿qué haces?', opts: ['Te acercas y sonríes', 'Los ignoras', 'Hablas encima de todos'], ans: 0 },
+            { q: '¿Un buen tema para el almuerzo?', opts: ['El examen que fallaste', 'Gustos y hobbies', 'Guardar silencio total'], ans: 1 },
+            { q: '¿Cómo agradeces a un compañero que te ayudó?', opts: ['No mencionas nada', 'Te muestras enojado', 'Le agradeces genuinamente'], ans: 2 },
+            { q: 'Para crear pertenencia, lo esencial es...', opts: ['Interacciones frecuentes y positivas', 'Aislarse del grupo', 'Solo estar en redes sociales'], ans: 0 }
+        ];
+        const QUIZ_REWARD = 20;
+
+        const ROUETTE_PRIZES = [
+            { xp: 30, c: '#48C9B0' }, { xp: 50, c: '#FFD166' }, { xp: 80, c: '#FF7F50' },
+            { xp: 100, c: '#6C5CE7' }, { xp: 150, c: '#00A8FF' }
+        ];
+
+        const AVATAR_EMOJIS = ['👤', '🌟', '🦋', '🌼', '🌊', '🐼', '🦊', '🐸', '🚀', '🎧', '🎮', '📚'];
+        const AVATAR_COLORS = ['#48C9B0', '#FF7F50', '#6C5CE7', '#F6C445', '#00A8FF', '#E84393'];
+
+        /* ===== Helpers ===== */
+        function todayKey() {
+            const d = new Date();
+            return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        }
+        function weekIdx() { return new Date().getDay(); }
+        const WEEK_LABELS = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
+
+        function load() {
             try {
                 const s = JSON.parse(localStorage.getItem('conectau-state') || '{}');
                 if (typeof s.xp === 'number') currentXp = s.xp;
                 if (typeof s.level === 'number') level = s.level;
                 if (typeof s.streak === 'number') streak = s.streak;
                 if (typeof s.missionsDone === 'number') missionsDone = s.missionsDone;
+                if (typeof s.scans === 'number') scans = s.scans;
                 if (typeof s.bonusUsed === 'boolean') bonusUsed = s.bonusUsed;
-                if (s.completedMissions) s.completedMissions.forEach(id => {
-                    const c = document.getElementById('mission-' + id);
-                    if (c && !c.classList.contains('completed')) {
-                        c.classList.add('completed');
-                        c.querySelector('.mission-icon').textContent = '✓';
-                        const b = c.querySelector('.btn-complete');
-                        if (b) b.style.display = 'none';
-                    }
-                });
-            } catch(e) {}
+
+                audioOn = localStorage.getItem('conectau-sound') !== 'off';
+
+                const w = JSON.parse(localStorage.getItem('conectau-week') || 'null');
+                if (Array.isArray(w) && w.length === 7) week = w;
+
+                owned = JSON.parse(localStorage.getItem('conectau-owned') || '[]');
+
+                const av = JSON.parse(localStorage.getItem('conectau-avatar') || 'null');
+                if (av) avatar = av;
+
+                const nm = localStorage.getItem('conectau-name');
+                if (nm) name = nm;
+
+                daily = JSON.parse(localStorage.getItem('conectau-daily-' + todayKey()) || '{}');
+            } catch (e) {}
         }
 
-        function saveState(completedMissions) {
+        function save() {
             try {
-                const completed = [];
-                document.querySelectorAll('.mission-card.completed').forEach(c => {
-                    const m = c.id.match(/mission-(\d+)/);
-                    if (m) completed.push(Number(m[1]));
-                });
                 localStorage.setItem('conectau-state', JSON.stringify({
-                    xp: currentXp, level, streak, missionsDone, bonusUsed, completedMissions: completed
+                    xp: currentXp, level, streak, missionsDone, scans, bonusUsed
                 }));
-            } catch(e) {}
+                localStorage.setItem('conectau-week', JSON.stringify(week));
+                localStorage.setItem('conectau-owned', JSON.stringify(owned));
+                localStorage.setItem('conectau-avatar', JSON.stringify(avatar));
+                localStorage.setItem('conectau-name', name);
+                localStorage.setItem('conectau-daily-' + todayKey(), JSON.stringify(daily));
+            } catch (e) {}
         }
 
-        function renderAll() {
-            document.getElementById('current-xp').textContent = currentXp;
-            document.getElementById('target-xp').textContent = TARGET_XP;
-            document.getElementById('level-text').textContent = 'Nivel ' + level;
-            document.getElementById('xp-bar').style.width = (Math.min(currentXp/TARGET_XP*100,100)) + '%';
-            document.getElementById('streak-chip').textContent = '🔥 Racha de ' + streak;
-            document.getElementById('stat-missions').textContent = missionsDone;
-            document.getElementById('stat-streak').textContent = streak;
+        function totalXp() { return (level - 1) * TARGET_XP + currentXp; }
 
-            const profileTitle = document.querySelector('.profile-title');
-            if (profileTitle) profileTitle.textContent = (LEVEL_NAMES[level] || 'Estudiante') + ' Nivel ' + level;
-
-            if (bonusUsed) {
-                const b = document.getElementById('bonus-card');
-                if (b) {
-                    const btn = b.querySelector('.btn-bonus');
-                    const info = b.querySelector('.bonus-info');
-                    if (btn) { btn.textContent = 'Usado ✓'; btn.disabled = true; btn.style.opacity = 0.6; }
-                    if (info) info.querySelector('p').textContent = 'Ya reclamaste tu sorpresa de hoy';
-                }
+        /* ===== Sound (Web Audio) ===== */
+        let audioCtx = null;
+        function ensureCtx() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+            } catch (e) {}
+            return audioCtx;
+        }
+        function tone(f, d, type, when, vol) {
+            const c = ensureCtx();
+            if (!c || !audioOn) return;
+            const o = c.createOscillator();
+            const g = c.createGain();
+            o.type = type || 'sine';
+            o.frequency.value = f;
+            const t0 = c.currentTime + (when || 0);
+            g.gain.setValueAtTime(vol || 0.12, t0);
+            g.gain.exponentialRampToValueAtTime(0.0001, t0 + d);
+            o.connect(g); g.connect(c.destination);
+            o.start(t0); o.stop(t0 + d + 0.02);
+        }
+        function sound(name) {
+            switch (name) {
+                case 'tap': tone(660, 0.06, 'triangle'); break;
+                case 'success': tone(523, 0.09); tone(659, 0.09, 'sine', 0.08); tone(784, 0.12, 'sine', 0.16); break;
+                case 'level': tone(523, 0.1); tone(659, 0.1, 'sine', 0.1); tone(784, 0.1, 'sine', 0.2); tone(1046, 0.2, 'sine', 0.3); break;
+                case 'coin': tone(987, 0.08, 'square', 0, 0.05); tone(1318, 0.12, 'square', 0.06, 0.05); break;
+                case 'error': tone(220, 0.15, 'sawtooth', 0, 0.07); break;
+                case 'correct': tone(659, 0.09); tone(784, 0.09, 'sine', 0.09); tone(988, 0.14, 'sine', 0.18); break;
+                case 'scan': tone(500, 0.05); tone(700, 0.05, 'sine', 0.07); break;
             }
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadState();
-            renderAll();
-        });
-
-        function navTo(screenName, el) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            el.classList.add('active');
-            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
-            document.getElementById('screen-' + screenName).classList.add('active');
+        function toggleSound() {
+            ensureCtx();
+            audioOn = !audioOn;
+            localStorage.setItem('conectau-sound', audioOn ? 'on' : 'off');
+            const b = document.getElementById('sound-toggle');
+            if (b) b.textContent = audioOn ? '🔊' : '🔇';
+            if (audioOn) sound('tap');
         }
 
-        function completeMission(id, xp) {
-            const card = document.getElementById('mission-' + id);
-            if (card.classList.contains('completed')) return;
-
-            card.classList.add('completed', 'pop');
-            card.querySelector('.mission-icon').textContent = '✓';
-            const btn = card.querySelector('.btn-complete');
-            if (btn) btn.style.display = 'none';
-
-            missionsDone++;
-            streak++;
-            confetti();
-            spawnXpGain(card, '+' + xp + ' XP');
-            addXp(xp);
-            showToast('¡Misión completada! +' + xp + ' XP');
-            saveState();
-            setTimeout(() => card.classList.remove('pop'), 500);
-        }
-
-        function addXp(amount) {
-            currentXp += amount;
-            renderAll();
-            if (currentXp >= TARGET_XP) {
-                levelUp();
-            }
-            saveState();
-        }
-
-        function levelUp() {
-            currentXp -= TARGET_XP;
-            level++;
-            renderAll();
-            document.getElementById('levelup-lv').textContent = 'Nivel ' + level;
-            document.getElementById('levelup-msg').textContent =
-                '¡Ahora eres ' + (LEVEL_NAMES[level] || 'Estudiante') + '! Sigue conectando.';
-            document.getElementById('levelup-overlay').classList.add('show');
-            confetti(40);
-            showToast('🎉 ¡Subiste al Nivel ' + level + '!');
-        }
-
-        function closeLevelUp() {
-            document.getElementById('levelup-overlay').classList.remove('show');
-        }
-
-        function claimBonus() {
-            if (bonusUsed) return;
-            const prizes = [30, 50, 80, 100, 150];
-            const xp = prizes[Math.floor(Math.random() * prizes.length)];
-            bonusUsed = true;
-            document.getElementById('bonus-xp-label').textContent = '+' + xp + ' XP';
-            const card = document.getElementById('bonus-card');
-            card.classList.add('pop');
-            confetti(20);
-            spawnXpGain(card, '+' + xp + ' XP');
-            addXp(xp);
-            showToast('🎲 ¡Sorpresa! +' + xp + ' XP');
-            renderAll();
-            saveState();
-            setTimeout(() => card.classList.remove('pop'), 500);
-        }
-
-        function simulateScan() {
-            if (isScanning) return;
-            isScanning = true;
-
-            const rewards = [
-                { t: 'Explorador de Biblioteca', xp: 50 },
-                { t: 'Amigo del Café', xp: 60 },
-                { t: 'Descubre el Polideportivo', xp: 45 }
-            ];
-            const r = rewards[Math.floor(Math.random() * rewards.length)];
-
-            showToast('🔍 Buscando códigos...');
-
-            setTimeout(() => {
-                navTo('dashboard', document.querySelectorAll('.nav-item')[0]);
-                showToast('🏆 Logro: ' + r.t + ' +' + r.xp + ' XP');
-                confetti(20);
-                addXp(r.xp);
-                isScanning = false;
-            }, 1800);
-        }
-
+        /* ===== Toast / Confetti / XP gain ===== */
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.textContent = msg;
@@ -1149,6 +1436,20 @@
             toast.classList.add('show');
             clearTimeout(toast._t);
             toast._t = setTimeout(() => toast.classList.remove('show'), 3200);
+        }
+
+        function confetti(count) {
+            const colors = ['#48C9B0', '#FF7F50', '#FFD166', '#26597e', '#80DED9', '#f6c445', '#6C5CE7'];
+            for (let i = 0; i < (count || 30); i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + 'vw';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDuration = (0.8 + Math.random() * 1.2) + 's';
+                piece.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 2200);
+            }
         }
 
         function spawnXpGain(anchor, text) {
@@ -1162,19 +1463,547 @@
             setTimeout(() => el.remove(), 1000);
         }
 
-        function confetti(count = 30) {
-            const colors = ['#48C9B0', '#FF7F50', '#FFD166', '#26597e', '#80DED9', '#f6c445'];
-            for (let i = 0; i < count; i++) {
-                const piece = document.createElement('div');
-                piece.className = 'confetti-piece';
-                piece.style.left = Math.random() * 100 + 'vw';
-                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-                piece.style.animationDuration = (0.8 + Math.random() * 1.2) + 's';
-                piece.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
-                document.body.appendChild(piece);
-                setTimeout(() => piece.remove(), 2200);
+        /* ===== Navigation ===== */
+        function navTo(screenName, el) {
+            if (el) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                el.classList.add('active');
+            }
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-' + screenName).classList.add('active');
+            sound('tap');
+        }
+
+        /* ===== Level / XP ===== */
+        function addXp(amount, el) {
+            currentXp += amount;
+            week[weekIdx()] = Math.min((week[weekIdx()] || 0) + amount, 260);
+            renderAll();
+            if (currentXp >= TARGET_XP) levelUp();
+            save();
+            if (el) spawnXpGain(el, '+' + amount + ' XP');
+        }
+
+        function levelUp() {
+            currentXp -= TARGET_XP;
+            level++;
+            document.getElementById('levelup-lv').textContent = 'Nivel ' + level;
+            document.getElementById('levelup-msg').textContent =
+                '¡Ahora eres ' + (LEVEL_NAMES[level] || 'Estudiante') + '! Sigue conectando y creciendo.';
+            document.getElementById('levelup-overlay').classList.add('show');
+            confetti(40);
+            sound('level');
+            renderAll();
+            showToast('🎉 ¡Subiste al Nivel ' + level + '!');
+        }
+
+        function closeLevelUp() {
+            document.getElementById('levelup-overlay').classList.remove('show');
+            sound('tap');
+        }
+
+        /* ===== Daily missions ===== */
+        function todayMissions() {
+            const h = todayKey().split('').reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 0);
+            const out = [], used = new Set();
+            for (let i = 0; i < 9; i++) {
+                if (out.length >= 3) break;
+                const idx = (h + 13 * i + 7 * i * i) % MISSION_POOL.length;
+                if (!used.has(idx)) { used.add(idx); out.push(MISSION_POOL[idx]); }
+            }
+            return out.length >= 3 ? out : MISSION_POOL.slice(0, 3);
+        }
+
+        function renderMissions() {
+            const list = document.getElementById('missions-list');
+            const missions = todayMissions();
+            list.innerHTML = '';
+            missions.forEach((m, i) => {
+                const done = !!daily[i];
+                const card = document.createElement('div');
+                card.className = 'mission-card' + (done ? ' completed' : '');
+                card.innerHTML =
+                    '<div class="mission-icon">' + (done ? '✓' : m.icon) + '</div>' +
+                    '<div class="mission-info">' +
+                        '<h3>' + m.t + '</h3>' +
+                        '<p>' + m.d + '</p>' +
+                        '<div class="xp-reward">✨ +' + m.xp + ' XP</div>' +
+                    '</div>' +
+                    (done ? '' : '<button class="btn-complete" onclick="completeMission(' + i + ',' + m.xp + ')">Completar</button>');
+                list.appendChild(card);
+            });
+
+            const fmt = new Intl.DateTimeFormat('es-CL', { weekday: 'long', day: 'numeric', month: 'long' });
+            const lbl = document.getElementById('today-label');
+            lbl.textContent = fmt.format(new Date()).replace(/(^\w)/, m => m.toUpperCase());
+        }
+
+        function completeMission(idx, xp) {
+            if (daily[idx]) return;
+            daily[idx] = true;
+            missionsDone++;
+            streak++;
+            sound('success');
+            confetti(25);
+            renderMissions();
+            addXp(xp);
+            checkAchievements();
+            showToast('¡Misión completada! +' + xp + ' XP 🎊');
+            const list = document.getElementById('missions-list');
+            const cards = list.querySelectorAll('.mission-card');
+            const card = cards[idx];
+            if (card) { card.classList.add('pop'); card.querySelector('.mission-icon').textContent = '✓'; }
+            setTimeout(() => { if (card) card.classList.remove('pop'); }, 500);
+        }
+
+        /* ===== Roulette ===== */
+        function openRoulette() {
+            if (bonusUsed) { showToast('Ya usaste la ruleta hoy 😉'); sound('error'); return; }
+            sound('tap');
+            rouletteSpinning = false;
+            document.getElementById('roulette-result').textContent = '';
+            document.getElementById('btn-spin').disabled = false;
+            const wheel = document.getElementById('wheel');
+            const stops = ROUETTE_PRIZES.map((p, i) => p.c + ' ' + i * 72 + 'deg ' + (i + 1) * 72 + 'deg').join(', ');
+            wheel.style.background = 'conic-gradient(from 0deg, ' + stops + ')';
+            document.getElementById('roulette-overlay').classList.add('show');
+        }
+
+        function spinWheel() {
+            if (rouletteSpinning) return;
+            rouletteSpinning = true;
+            sound('spin');
+            const btn = document.getElementById('btn-spin');
+            btn.disabled = true;
+            document.getElementById('roulette-result').textContent = '...';
+            rouletteIndex = Math.floor(Math.random() * ROUETTE_PRIZES.length);
+            const seg = 360 / ROUETTE_PRIZES.length;
+            const targetRot = rouletteLast + 360 * 5 + ((270 - (rouletteIndex * seg + seg / 2)) % 360 + 360) % 360;
+            rouletteLast = targetRot;
+            document.getElementById('wheel').style.transform = 'rotate(' + targetRot + 'deg)';
+            setTimeout(() => {
+                const prize = ROUETTE_PRIZES[rouletteIndex];
+                bonusUsed = true;
+                sound('coin');
+                confetti(25);
+                document.getElementById('roulette-result').textContent = '✨ Ganas +' + prize.xp + ' XP';
+                addXp(prize.xp, document.getElementById('roulette-overlay').querySelector('.roulette-modal'));
+                document.getElementById('bonus-status').textContent = 'Ya giraste hoy ✓';
+                toastStatusBonus();
+                save();
+                setTimeout(() => {
+                    document.getElementById('roulette-overlay').classList.remove('show');
+                    rouletteSpinning = false;
+                }, 1500);
+            }, 2700);
+        }
+
+        function toastStatusBonus() {
+            const b = document.getElementById('bonus-status');
+            if (b) b.textContent = 'Ya giraste hoy ✓';
+        }
+
+        /* ===== Quiz ===== */
+        function startQuiz() {
+            sound('tap');
+            quizIndex = 0; quizScore = 0; quizAnswered = false;
+            renderQuiz();
+            document.getElementById('quiz-overlay').classList.add('show');
+        }
+        function renderQuiz() {
+            document.getElementById('quiz-progress').textContent = 'Pregunta ' + (quizIndex + 1) + ' de ' + QUIZ.length;
+            const q = QUIZ[quizIndex];
+            document.getElementById('quiz-question').textContent = q.q;
+            document.getElementById('quiz-msg').textContent = '';
+            const next = document.getElementById('quiz-next');
+            next.classList.add('hidden');
+            const opts = document.getElementById('quiz-opts');
+            opts.innerHTML = '';
+            q.opts.forEach((opt, i) => {
+                const b = document.createElement('button');
+                b.className = 'quiz-opt';
+                b.textContent = opt;
+                b.onclick = () => answerQuiz(i);
+                opts.appendChild(b);
+            });
+        }
+        function answerQuiz(i) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+            const q = QUIZ[quizIndex];
+            const opts = document.querySelectorAll('.quiz-opt');
+            opts.forEach((b, j) => {
+                b.disabled = true;
+                if (j === q.ans) b.classList.add('correct');
+                if (j === i && i !== q.ans) b.classList.add('wrong');
+            });
+            if (i === q.ans) {
+                quizScore++;
+                sound('correct');
+                document.getElementById('quiz-msg').textContent = '🎉 ¡Correcto! +' + QUIZ_REWARD + ' XP';
+                document.getElementById('quiz-msg').style.color = 'var(--primary)';
+            } else {
+                sound('error');
+                document.getElementById('quiz-msg').textContent = '😅 No es correcto, ¡pero sigue!';
+                document.getElementById('quiz-msg').style.color = '#a6422a';
+            }
+            document.getElementById('quiz-next').classList.remove('hidden');
+        }
+        function nextQuiz() {
+            if (quizIndex < QUIZ.length - 1) {
+                quizIndex++;
+                quizAnswered = false;
+                renderQuiz();
+            } else {
+                const earned = quizScore * QUIZ_REWARD;
+                document.getElementById('quiz-overlay').classList.remove('show');
+                if (quizScore >= 3) confetti(30);
+                if (earned > 0) {
+                    sound('level');
+                    showToast('📚 Quiz: ' + quizScore + ' correctas, +' + earned + ' XP');
+                    addXp(earned);
+                } else {
+                    sound('tap');
+                    showToast('¡Terminaste el quiz! Intenta de nuevo mañana 🎯');
+                }
             }
         }
+
+        /* ===== Ranking ===== */
+        function myWeeklyXp() { return week.reduce((a, b) => a + b, 0); }
+
+        function renderRanking() {
+            const rows = RANK_FRIENDS.map(f => ({
+                name: f.name, avatar: f.avatar, color: f.color, xp: f.xp, me: false
+            }));
+            rows.push({ name: name, avatar: avatar.emoji, color: avatar.color, xp: myWeeklyXp(), me: true });
+            rows.sort((a, b) => b.xp - a.xp);
+
+            const max = Math.max(1, rows[0].xp);
+            const list = document.getElementById('ranking-list');
+            list.innerHTML = '';
+            rows.forEach((r, i) => {
+                const div = document.createElement('div');
+                div.className = 'rank-player' + (r.me ? ' me' : '');
+                const pct = Math.round((r.xp / max) * 100);
+                div.innerHTML =
+                    '<div class="rank-pos">' + (r.me && i === 0 ? '👑' : '#' + (i + 1)) + '</div>' +
+                    '<div class="rank-avatar" style="background:' + r.color + '">' + r.avatar + '</div>' +
+                    '<div class="rank-info">' +
+                        '<div class="rank-name">' + r.name + '</div>' +
+                        '<div class="rank-xp">' + r.xp + ' XP esta semana</div>' +
+                        '<div class="rank-bar-bg"><div class="rank-bar" style="background:' + r.color + '"></div></div>' +
+                    '</div>' +
+                    (r.me ? '<span class="rank-tag">TÚ</span>' : '');
+                list.appendChild(div);
+                if (owned.indexOf('crown') !== -1 && i === 0 && r.me) div.querySelector('.rank-pos').textContent = '👑';
+            });
+            requestAnimationFrame(() => {
+                list.querySelectorAll('.rank-player').forEach((row, i) => {
+                    const r = rows[i];
+                    const bar = row.querySelector('.rank-bar');
+                    bar.style.width = Math.round((r.xp / max) * 100) + '%';
+                });
+            });
+        }
+
+        /* ===== Shop ===== */
+        function renderShop() {
+            const wallet = document.getElementById('wallet-amount');
+            wallet.textContent = totalXp() + ' XP';
+            const list = document.getElementById('shop-list');
+            list.innerHTML = '';
+            SHOP_ITEMS.forEach(item => {
+                const isOwned = owned.indexOf(item.id) !== -1;
+                const canAfford = totalXp() >= item.cost;
+                const div = document.createElement('div');
+                div.className = 'shop-item' + (isOwned ? ' owned' : '');
+                div.innerHTML =
+                    '<div class="shop-icon">' + item.icon + '</div>' +
+                    '<div class="shop-info">' +
+                        '<div class="shop-name">' + item.name + '</div>' +
+                        '<div class="shop-desc">' + item.desc + '</div>' +
+                        '<div class="shop-cost">' + (isOwned ? '✔ Adquirido' : '💰 ' + item.cost + ' XP') + '</div>' +
+                    '</div>' +
+                    '<button class="btn-shop ' + (isOwned ? 'owned' : (!canAfford ? 'poor' : '')) + '" ' +
+                        (isOwned || !canAfford ? 'disabled' : '') +
+                        ' onclick="buyItem(\'' + item.id + '\')">' +
+                        (isOwned ? 'Listo' : (canAfford ? 'Comprar' : 'Falta XP')) + '</button>';
+                list.appendChild(div);
+            });
+        }
+
+        function buyItem(id) {
+            const item = SHOP_ITEMS.find(i => i.id === id);
+            if (!item || owned.indexOf(id) !== -1) return;
+            if (totalXp() < item.cost) { sound('error'); showToast('No te alcanza la XP ⚠️'); return; }
+            owned.push(id);
+            sound('coin');
+            confetti(30);
+            renderAll();
+            showToast('🎁 ¡Compraste ' + item.name + '!');
+        }
+
+        /* ===== Avatar ===== */
+        function openAvatarPicker() {
+            sound('tap');
+            const grid = document.getElementById('avatar-grid');
+            grid.innerHTML = '';
+            AVATAR_EMOJIS.forEach(e => {
+                const b = document.createElement('button');
+                b.className = 'avatar-opt' + (e === avatar.emoji ? ' sel' : '');
+                b.textContent = e;
+                b.onclick = () => { avatar.emoji = e; refreshPickerUI(); save(); sound('tap'); };
+                grid.appendChild(b);
+            });
+            const crow = document.getElementById('color-row');
+            crow.innerHTML = '';
+            AVATAR_COLORS.forEach(c => {
+                const d = document.createElement('div');
+                d.className = 'color-opt' + (c === avatar.color ? ' sel' : '');
+                d.style.background = c;
+                d.onclick = () => { avatar.color = c; refreshPickerUI(); save(); sound('tap'); };
+                crow.appendChild(d);
+            });
+            refreshPickerUI();
+            document.getElementById('avatar-overlay').classList.add('show');
+        }
+        function refreshPickerUI() {
+            document.getElementById('avatar-display').textContent = avatar.emoji;
+            document.getElementById('avatar-display').style.background = avatar.color;
+            document.querySelectorAll('.avatar-opt').forEach(b => b.classList.toggle('sel', b.textContent === avatar.emoji));
+            document.querySelectorAll('.color-opt').forEach(d => d.classList.toggle('sel', d.style.background === avatar.color));
+        }
+        function closeAvatarPicker() {
+            document.getElementById('avatar-overlay').classList.remove('show');
+            sound('tap');
+        }
+        function saveName(v) {
+            name = (v || 'Estudiante').trim() || 'Estudiante';
+            save();
+            renderAll();
+            sound('tap');
+            showToast('Nombre guardado ✅');
+        }
+
+        /* ===== Achievements ===== */
+        function checkAchievements(announce) {
+            const condMap = [
+                { id: 'social', unlocked: missionsDone >= 1, icon: '💬', label: 'Social' },
+                { id: 'explora', unlocked: scans >= 1, icon: '🗺️', label: 'Explora' },
+                { id: 'voz', unlocked: missionsDone >= 3, icon: '🎤', label: 'Voz Alta' },
+                { id: 'misterio', unlocked: level >= 3, icon: '🔮', label: 'Misterio' }
+            ];
+            try { var prev = JSON.parse(localStorage.getItem('conectau-unlocked') || '[]'); } catch (e) { prev = []; }
+
+            const grid = document.getElementById('achievements-grid');
+            grid.innerHTML = '';
+            condMap.forEach(c => {
+                const isUnlocked = c.unlocked;
+                const col = document.createElement('div');
+                col.className = 'badge-col';
+                col.innerHTML =
+                    '<div class="badge ' + (isUnlocked ? 'unlocked' : 'locked') + '">' + c.icon + '</div>' +
+                    '<span>' + c.label + '</span>';
+                grid.appendChild(col);
+                if (announce && isUnlocked && prev.indexOf(c.id) === -1) {
+                    sound('level');
+                    confetti(15);
+                    showToast('🏅 ¡Logro desbloqueado: ' + c.label + '!');
+                }
+            });
+            if (announce) {
+                const now = condMap.filter(c => c.unlocked).map(c => c.id);
+                localStorage.setItem('conectau-unlocked', JSON.stringify(now));
+            }
+        }
+
+        /* ===== Weekly chart ===== */
+        function renderChart(el, animate) {
+            if (!el) return;
+            const max = Math.max(1, ...week);
+            el.innerHTML = '';
+            week.forEach((v, i) => {
+                const wrap = document.createElement('div');
+                wrap.className = 'chart-bar-wrap';
+                const h = Math.max(4, Math.round((v / max) * 100));
+                const isToday = i === weekIdx();
+                wrap.innerHTML =
+                    '<div class="chart-val">' + v + '</div>' +
+                    '<div class="chart-bar' + (isToday ? ' high' : '') + '" data-h="' + h + '" style="height:' + (animate ? 4 : h) + '%"></div>' +
+                    '<div class="chart-day' + (isToday ? '" style="color:var(--primary);font-weight:700' : '') + '">' + WEEK_LABELS[i] + '</div>';
+                el.appendChild(wrap);
+            });
+            if (animate) {
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        el.querySelectorAll('.chart-bar').forEach(bar => {
+                            bar.style.height = bar.getAttribute('data-h') + '%';
+                        });
+                    }, 30);
+                });
+            }
+        }
+
+        /* ===== Greeting ===== */
+        function greeting() {
+            const h = new Date().getHours();
+            if (h < 12) return 'Buenos días';
+            if (h < 19) return 'Buenas tardes';
+            return 'Buenas noches';
+        }
+
+        /* ===== Render all ===== */
+        function renderAll() {
+            document.getElementById('current-xp').textContent = currentXp;
+            document.getElementById('target-xp').textContent = TARGET_XP;
+            document.getElementById('level-text').textContent = 'Nivel ' + level;
+            document.getElementById('xp-bar').style.width = (Math.min(currentXp / TARGET_XP * 100, 100)) + '%';
+            const chip = document.getElementById('streak-chip');
+            chip.textContent = '🔥 Racha de ' + streak;
+
+            const g = document.getElementById('greeting');
+            g.textContent = greeting() + ', ' + (name.split(' ')[0] || 'Estudiante') + '!';
+
+            const doc = document.getElementById('name-input');
+            if (document.activeElement !== doc) doc.value = name;
+
+            document.getElementById('profile-title').textContent =
+                (LEVEL_NAMES[level] || 'Estudiante') + ' Nivel ' + level;
+            document.getElementById('stat-missions').textContent = missionsDone;
+            document.getElementById('stat-streak').textContent = streak;
+            document.getElementById('stat-xp').textContent = totalXp();
+
+            document.getElementById('avatar-display').textContent = avatar.emoji;
+            document.getElementById('avatar-display').style.background = avatar.color;
+
+            document.getElementById('sound-toggle').textContent = audioOn ? '🔊' : '🔇';
+
+            toastStatusBonus();
+            renderMissions();
+            renderRanking();
+            renderShop();
+            checkAchievements(false);
+            renderChart(document.getElementById('week-chart'), true);
+            renderChart(document.getElementById('week-chart-big'), true);
+        }
+
+        /* ===== Scanner ===== */
+        function simulateScan() {
+            if (isScanning) return;
+            isScanning = true;
+            sound('scan');
+            const rewards = [
+                { t: 'Explorador de Biblioteca', xp: 50 },
+                { t: 'Amigo del Café', xp: 60 },
+                { t: 'Descubre el Polideportivo', xp: 45 },
+                { t: 'Salón de Cine', xp: 70 },
+                { t: 'Rincón del Campus', xp: 55 }
+            ];
+            const r = rewards[Math.floor(Math.random() * rewards.length)];
+            showToast('🔍 Buscando códigos...');
+            setTimeout(() => {
+                scans++;
+                navTo('dashboard', document.querySelector('.nav-item[data-screen="dashboard"]'));
+                sound('success');
+                confetti(20);
+                showToast('🏆 Logro: ' + r.t + ' +' + r.xp + ' XP');
+                addXp(r.xp);
+                checkAchievements(true);
+                save();
+                isScanning = false;
+            }, 1800);
+        }
+
+        /* ===== Onboarding ===== */
+        const OB_SLIDES = [
+            {
+                emoji: '🚀',
+                title: '¡Bienvenido a ConectaU!',
+                text: 'Una app gamificada para que conectes, participes y sientas que perteneces a tu comunidad universitaria.',
+                features: [
+                    ['📅', 'Misiones diarias que rotan cada día'],
+                    ['🏆', 'Ranking semanal y tienda de premios'],
+                    ['🎲', 'Ruleta, quiz y códigos QR']
+                ]
+            },
+            {
+                emoji: '⚡',
+                title: 'Gana XP y sube de nivel',
+                text: 'Completa misiones sociales reales, escanea códigos en el campus y juega para ganar experiencia. Cada 500 XP subes de nivel: de Novato a Líder.',
+                features: [
+                    ['🏅', 'Logros y medallas desbloqueables'],
+                    ['📈', 'Gráfico con tu actividad semanal'],
+                    ['💾', 'Tu progreso se guarda automáticamente']
+                ]
+            },
+            {
+                emoji: '🤝',
+                title: 'Conecta · Participa · Pertenece',
+                text: 'El camino va de CONOCE a CONECTA, y luego a COMPARTE y PERTENECE. Cada interacción cuenta para sentirte parte de la comunidad.',
+                features: [
+                    ['🛍️', 'Canjea tu XP por recompensas'],
+                    ['🔊', 'Sonidos y animaciones de celebración'],
+                    ['😊', 'Todo pensado para tu bienestar']
+                ]
+            }
+        ];
+
+        function onboardShow() {
+            const ob = document.getElementById('onboarding');
+            ob.classList.add('show');
+        }
+        function onboardHide() {
+            document.getElementById('onboarding').classList.remove('show');
+            localStorage.setItem('conectau-onboarded', '1');
+        }
+        function onboardRender() {
+            const s = OB_SLIDES[onboardingStep];
+            document.getElementById('ob-emoji').textContent = s.emoji;
+            document.getElementById('ob-title').textContent = s.title;
+            document.getElementById('ob-text').textContent = s.text;
+            const feats = document.getElementById('ob-features');
+            feats.innerHTML = '';
+            s.features.forEach(f => {
+                const d = document.createElement('div');
+                d.className = 'ob-feature';
+                d.innerHTML = '<span class="ob-icon">' + f[0] + '</span> ' + f[1];
+                feats.appendChild(d);
+            });
+            for (let i = 0; i < 3; i++) {
+                document.getElementById('dot-' + i).classList.toggle('active', i === onboardingStep);
+            }
+            document.getElementById('ob-btn').textContent = (onboardingStep === 2) ? '¡A conectar! 🎉' : 'Siguiente';
+        }
+        function onboardNext() {
+            sound('tap');
+            if (onboardingStep < 2) {
+                onboardingStep++;
+                onboardRender();
+            } else {
+                onboardHide();
+                sound('success');
+                confetti(35);
+            }
+        }
+        function replayOnboarding() {
+            onboardingStep = 0;
+            onboardRender();
+            onboardShow();
+            sound('tap');
+        }
+
+        /* ===== Init ===== */
+        document.addEventListener('DOMContentLoaded', () => {
+            load();
+            renderAll();
+            const onboarded = localStorage.getItem('conectau-onboarded') === '1';
+            if (!onboarded) {
+                onboardingStep = 0;
+                onboardRender();
+                onboardShow();
+            }
+        });
     </script>
 </body>
 </html>
