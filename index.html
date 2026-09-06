@@ -89,19 +89,78 @@
             pointer-events: auto;
         }
 
+        /* UDD Brand Bar */
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: var(--surface);
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .brand-logo {
+            height: 36px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-text strong {
+            font-size: 15px;
+            color: var(--text-primary);
+            letter-spacing: 0.3px;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         /* Dashboard Header */
         .header {
-            background-color: var(--surface);
-            padding: 40px 24px 24px;
+            background: linear-gradient(135deg, var(--surface) 0%, #ecfbf8 100%);
+            padding: 32px 24px 28px;
             border-bottom-left-radius: 30px;
             border-bottom-right-radius: 30px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.03);
         }
 
-        .header h1 {
-            font-size: 28px;
-            color: var(--text-primary);
+        .header-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
             margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .header-chip {
+            background-color: var(--primary-light);
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .header p {
@@ -538,10 +597,22 @@
         
         <!-- DASHBOARD SCREEN -->
         <div id="screen-dashboard" class="screen active">
+            <div class="brand-bar">
+                <img class="brand-logo" src="psicologia-logo.png" alt="Facultad de Psicología UDD">
+                <div class="brand-text">
+                    <strong>Universidad del Desarrollo</strong>
+                    <span>Facultad de Psicología</span>
+                </div>
+            </div>
+
             <div class="header">
-                <h1>¡Hola, Estudiante!</h1>
-                <p>¿Listo para salir de tu zona de confort?</p>
-                
+                <div class="header-top">
+                    <div>
+                        <h1>¡Hola, Estudiante!</h1>
+                        <p>¿Listo para salir de tu zona de confort?</p>
+                    </div>
+                    <span class="header-chip">🛡️ UDD</span>
+                </div>
                 <div class="xp-container">
                     <div class="xp-header">
                         <span class="level-text">Nivel 2</span>
