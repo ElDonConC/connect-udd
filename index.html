@@ -631,6 +631,164 @@
             }
         }
 
+        /* Bonus Mission Card */
+        .bonus-card {
+            background: linear-gradient(135deg, var(--accent), #ff9a6b);
+            border-radius: 20px;
+            padding: 18px;
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(255,127,80,0.35);
+            animation: bonuspulse 2s ease-in-out infinite;
+        }
+
+        @keyframes bonuspulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .bonus-icon {
+            font-size: 34px;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .bonus-info { flex: 1; }
+        .bonus-info h3 { font-size: 17px; margin-bottom: 4px; }
+        .bonus-info p { font-size: 13px; opacity: 0.92; }
+        .bonus-xp { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 4px; margin-top: 6px; }
+
+        .btn-bonus {
+            background: white;
+            color: var(--accent);
+            border: none;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            transition: transform 0.2s;
+            white-space: nowrap;
+        }
+        .btn-bonus:hover { transform: scale(1.05); }
+
+        /* Level Up Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.show { display: flex; }
+
+        .levelup-modal {
+            background: linear-gradient(160deg, #fff 0%, #eafaf7 100%);
+            border-radius: 28px;
+            padding: 32px 24px;
+            width: 320px;
+            max-width: 88%;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            animation: popin 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popin {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .levelup-emoji { font-size: 64px; animation: bounce 1s infinite; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .levelup-modal h2 { font-size: 26px; color: var(--text-primary); margin: 8px 0; }
+        .levelup-modal .lv { font-size: 18px; color: var(--primary); font-weight: 700; margin-bottom: 4px; }
+        .levelup-modal p { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; }
+
+        .btn-modal {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-modal:hover { transform: scale(1.03); }
+
+        /* Confetti */
+        .confetti-piece {
+            position: fixed;
+            top: -20px;
+            width: 10px;
+            height: 14px;
+            border-radius: 2px;
+            z-index: 90;
+            pointer-events: none;
+            animation: confettifall linear forwards;
+        }
+        @keyframes confettifall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(720deg); opacity: 0.6; }
+        }
+
+        /* Mission complete pop animation */
+        .mission-card.pop {
+            animation: missionpop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        @keyframes missionpop {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.06); }
+            100% { transform: scale(1); }
+        }
+
+        /* Streak badge in header */
+        .streak-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,209,102,0.25);
+            color: #b8860b;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-top: 12px;
+        }
+
+        /* Reward feedback on XP */
+        .xp-gain {
+            position: absolute;
+            font-weight: 800;
+            color: var(--accent);
+            font-size: 18px;
+            pointer-events: none;
+            animation: xprise 1s ease-out forwards;
+            z-index: 50;
+        }
+        @keyframes xprise {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-40px); opacity: 0; }
+        }
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -669,12 +827,13 @@
                 </div>
                 <div class="xp-container">
                     <div class="xp-header">
-                        <span class="level-text">Nivel 2</span>
-                        <span class="xp-text"><span id="current-xp">150</span> / 500 XP</span>
+                        <span class="level-text" id="level-text">Nivel 2</span>
+                        <span class="xp-text"><span id="current-xp">150</span> / <span id="target-xp">500</span> XP</span>
                     </div>
                     <div class="progress-bar-bg">
                         <div class="progress-bar-fill" id="xp-bar" style="width: 30%"></div>
                     </div>
+                    <span class="streak-chip" id="streak-chip">🔥 Racha de 3</span>
                 </div>
             </div>
 
@@ -708,6 +867,16 @@
                         <div class="xp-reward">✨ +100 XP</div>
                     </div>
                     <button class="btn-complete" onclick="completeMission(3, 100)">Completar</button>
+                </div>
+
+                <div class="bonus-card" id="bonus-card">
+                    <div class="bonus-icon">🎲</div>
+                    <div class="bonus-info">
+                        <h3>Sorpresa Social</h3>
+                        <p>Gira la ruleta y gana XP extra</p>
+                        <div class="bonus-xp">✨ <span id="bonus-xp-label">+?? XP</span></div>
+                    </div>
+                    <button class="btn-bonus" onclick="claimBonus()">Girar</button>
                 </div>
             </div>
         </div>
@@ -760,19 +929,19 @@
                 <div class="stats-row">
                     <div class="stat-item">
                         <div style="color:var(--primary); font-size: 24px; margin-bottom: 4px;">🚩</div>
-                        <div class="stat-value">12</div>
+                        <div class="stat-value" id="stat-missions">2</div>
                         <div class="stat-label">Misiones</div>
                     </div>
                     <div style="width: 1px; background: #eee;"></div>
                     <div class="stat-item">
                         <div style="color:var(--primary); font-size: 24px; margin-bottom: 4px;">🔥</div>
-                        <div class="stat-value">3</div>
+                        <div class="stat-value" id="stat-streak">3</div>
                         <div class="stat-label">Racha</div>
                     </div>
                     <div style="width: 1px; background: #eee;"></div>
                     <div class="stat-item">
                         <div style="color:var(--primary); font-size: 24px; margin-bottom: 4px;">👥</div>
-                        <div class="stat-value">2</div>
+                        <div class="stat-value" id="stat-friends">2</div>
                         <div class="stat-label">Amigos</div>
                     </div>
                 </div>
@@ -798,60 +967,213 @@
         <!-- TOAST NOTIFICATION -->
         <div id="toast" class="toast"></div>
 
+        <!-- LEVEL UP MODAL -->
+        <div class="modal-overlay" id="levelup-overlay">
+            <div class="levelup-modal">
+                <div class="levelup-emoji">🎉</div>
+                <h2>¡Subiste de nivel!</h2>
+                <div class="lv" id="levelup-lv">Nivel 3</div>
+                <p id="levelup-msg">Sigue conectando y creciendo.</p>
+                <button class="btn-modal" onclick="closeLevelUp()">¡Continuar!</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
+        const TARGET_XP = 500;
         let currentXp = 150;
-        const targetXp = 500;
+        let level = 2;
+        let streak = 3;
+        let missionsDone = 1;
         let isScanning = false;
+        let bonusUsed = false;
+        const LEVEL_NAMES = ['','Novato','Explorador','Conector','Atrevido','Líder'];
+
+        function loadState() {
+            try {
+                const s = JSON.parse(localStorage.getItem('conectau-state') || '{}');
+                if (typeof s.xp === 'number') currentXp = s.xp;
+                if (typeof s.level === 'number') level = s.level;
+                if (typeof s.streak === 'number') streak = s.streak;
+                if (typeof s.missionsDone === 'number') missionsDone = s.missionsDone;
+                if (typeof s.bonusUsed === 'boolean') bonusUsed = s.bonusUsed;
+                if (s.completedMissions) s.completedMissions.forEach(id => {
+                    const c = document.getElementById('mission-' + id);
+                    if (c && !c.classList.contains('completed')) {
+                        c.classList.add('completed');
+                        c.querySelector('.mission-icon').textContent = '✓';
+                        const b = c.querySelector('.btn-complete');
+                        if (b) b.style.display = 'none';
+                    }
+                });
+            } catch(e) {}
+        }
+
+        function saveState(completedMissions) {
+            try {
+                const completed = [];
+                document.querySelectorAll('.mission-card.completed').forEach(c => {
+                    const m = c.id.match(/mission-(\d+)/);
+                    if (m) completed.push(Number(m[1]));
+                });
+                localStorage.setItem('conectau-state', JSON.stringify({
+                    xp: currentXp, level, streak, missionsDone, bonusUsed, completedMissions: completed
+                }));
+            } catch(e) {}
+        }
+
+        function renderAll() {
+            document.getElementById('current-xp').textContent = currentXp;
+            document.getElementById('target-xp').textContent = TARGET_XP;
+            document.getElementById('level-text').textContent = 'Nivel ' + level;
+            document.getElementById('xp-bar').style.width = (Math.min(currentXp/TARGET_XP*100,100)) + '%';
+            document.getElementById('streak-chip').textContent = '🔥 Racha de ' + streak;
+            document.getElementById('stat-missions').textContent = missionsDone;
+            document.getElementById('stat-streak').textContent = streak;
+
+            const profileTitle = document.querySelector('.profile-title');
+            if (profileTitle) profileTitle.textContent = (LEVEL_NAMES[level] || 'Estudiante') + ' Nivel ' + level;
+
+            if (bonusUsed) {
+                const b = document.getElementById('bonus-card');
+                if (b) {
+                    const btn = b.querySelector('.btn-bonus');
+                    const info = b.querySelector('.bonus-info');
+                    if (btn) { btn.textContent = 'Usado ✓'; btn.disabled = true; btn.style.opacity = 0.6; }
+                    if (info) info.querySelector('p').textContent = 'Ya reclamaste tu sorpresa de hoy';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            renderAll();
+        });
 
         function navTo(screenName, el) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
-
             document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
             document.getElementById('screen-' + screenName).classList.add('active');
         }
 
         function completeMission(id, xp) {
             const card = document.getElementById('mission-' + id);
-            
-            card.classList.add('completed');
-            card.querySelector('.mission-icon').textContent = '✓';
-            card.querySelector('.btn-complete').style.display = 'none';
+            if (card.classList.contains('completed')) return;
 
+            card.classList.add('completed', 'pop');
+            card.querySelector('.mission-icon').textContent = '✓';
+            const btn = card.querySelector('.btn-complete');
+            if (btn) btn.style.display = 'none';
+
+            missionsDone++;
+            streak++;
+            confetti();
+            spawnXpGain(card, '+' + xp + ' XP');
             addXp(xp);
-            showToast(`¡Misión completada! +${xp} XP`);
+            showToast('¡Misión completada! +' + xp + ' XP');
+            saveState();
+            setTimeout(() => card.classList.remove('pop'), 500);
         }
-        
+
         function addXp(amount) {
             currentXp += amount;
-            document.getElementById('current-xp').textContent = currentXp;
-            
-            const percentage = Math.min((currentXp / targetXp) * 100, 100);
-            document.getElementById('xp-bar').style.width = percentage + '%';
+            renderAll();
+            if (currentXp >= TARGET_XP) {
+                levelUp();
+            }
+            saveState();
+        }
+
+        function levelUp() {
+            currentXp -= TARGET_XP;
+            level++;
+            renderAll();
+            document.getElementById('levelup-lv').textContent = 'Nivel ' + level;
+            document.getElementById('levelup-msg').textContent =
+                '¡Ahora eres ' + (LEVEL_NAMES[level] || 'Estudiante') + '! Sigue conectando.';
+            document.getElementById('levelup-overlay').classList.add('show');
+            confetti(40);
+            showToast('🎉 ¡Subiste al Nivel ' + level + '!');
+        }
+
+        function closeLevelUp() {
+            document.getElementById('levelup-overlay').classList.remove('show');
+        }
+
+        function claimBonus() {
+            if (bonusUsed) return;
+            const prizes = [30, 50, 80, 100, 150];
+            const xp = prizes[Math.floor(Math.random() * prizes.length)];
+            bonusUsed = true;
+            document.getElementById('bonus-xp-label').textContent = '+' + xp + ' XP';
+            const card = document.getElementById('bonus-card');
+            card.classList.add('pop');
+            confetti(20);
+            spawnXpGain(card, '+' + xp + ' XP');
+            addXp(xp);
+            showToast('🎲 ¡Sorpresa! +' + xp + ' XP');
+            renderAll();
+            saveState();
+            setTimeout(() => card.classList.remove('pop'), 500);
         }
 
         function simulateScan() {
             if (isScanning) return;
             isScanning = true;
-            
-            showToast("¡Código encontrado! Logro: Explorador de Biblioteca. +50 XP");
-            
+
+            const rewards = [
+                { t: 'Explorador de Biblioteca', xp: 50 },
+                { t: 'Amigo del Café', xp: 60 },
+                { t: 'Descubre el Polideportivo', xp: 45 }
+            ];
+            const r = rewards[Math.floor(Math.random() * rewards.length)];
+
+            showToast('🔍 Buscando códigos...');
+
             setTimeout(() => {
                 navTo('dashboard', document.querySelectorAll('.nav-item')[0]);
-                addXp(50);
+                showToast('🏆 Logro: ' + r.t + ' +' + r.xp + ' XP');
+                confetti(20);
+                addXp(r.xp);
                 isScanning = false;
-            }, 2500);
+            }, 1800);
         }
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.textContent = msg;
+            toast.classList.remove('show');
+            void toast.offsetWidth;
             toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            clearTimeout(toast._t);
+            toast._t = setTimeout(() => toast.classList.remove('show'), 3200);
+        }
+
+        function spawnXpGain(anchor, text) {
+            const rect = anchor.getBoundingClientRect();
+            const el = document.createElement('div');
+            el.className = 'xp-gain';
+            el.textContent = text;
+            el.style.left = (rect.left + rect.width / 2 - 30) + 'px';
+            el.style.top = (rect.top - 10) + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1000);
+        }
+
+        function confetti(count = 30) {
+            const colors = ['#48C9B0', '#FF7F50', '#FFD166', '#26597e', '#80DED9', '#f6c445'];
+            for (let i = 0; i < count; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + 'vw';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDuration = (0.8 + Math.random() * 1.2) + 's';
+                piece.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 2200);
+            }
         }
     </script>
 </body>
