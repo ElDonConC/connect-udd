@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect - Prototipo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        :root {
+            --primary: #48C9B0;
+            --primary-light: #80DED9;
+            --background: #F7F9FC;
+            --surface: #FFFFFF;
+            --accent: #FF7F50;
+            --warning: #FFD166;
+            --text-primary: #2B3A42;
+            --text-secondary: #7A8B94;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #e5e5e5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* App Container */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background-color: var(--background);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        @media (min-width: 481px) {
+            body {
+                align-items: flex-start;
+            }
+            .app-container {
+                border-radius: 0;
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+
+        @media (min-width: 769px) {
+            body {
+                background-color: #e5e5e5;
+            }
+            .app-container {
+                max-width: 480px;
+                min-height: 100vh;
+                min-height: 100dvh;
+                border-radius: 24px;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+                margin: 20px auto;
+            }
+        }
+
+        /* Screens */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 80px);
+            overflow-y: auto;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Dashboard Header */
+        .header {
+            background-color: var(--surface);
+            padding: 40px 24px 24px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .xp-container {
+            margin-top: 10px;
+        }
+
+        .xp-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .level-text { color: var(--primary); }
+        .xp-text { color: var(--text-secondary); font-size: 14px; }
+
+        .progress-bar-bg {
+            background-color: var(--background);
+            height: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background-color: var(--accent);
+            height: 100%;
+            width: 30%;
+            border-radius: 10px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Missions */
+        .missions-section {
+            padding: 24px;
+        }
+
+        .missions-title {
+            font-size: 22px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .mission-card {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .mission-card.completed {
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.7);
+        }
+
+        .mission-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: rgba(128, 222, 217, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 16px;
+            font-size: 24px;
+            color: var(--warning);
+            transition: all 0.3s ease;
+        }
+
+        .mission-card.completed .mission-icon {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .mission-info {
+            flex: 1;
+        }
+
+        .mission-info h3 {
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            transition: color 0.3s;
+        }
+
+        .mission-card.completed .mission-info h3 {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .mission-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .xp-reward {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-complete {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+        
+        .btn-complete:hover {
+            transform: scale(1.05);
+            background-color: #3ba993;
+        }
+
+        /* Profile Screen */
+        .profile-container {
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            color: var(--text-primary);
+        }
+
+        .profile-title {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            text-align: left;
+            font-size: 20px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .badge-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .badge {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: rgba(255, 209, 102, 0.2);
+            border: 2px solid var(--warning);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .badge.locked {
+            background-color: var(--background);
+            border-color: #ddd;
+            color: #aaa;
+        }
+
+        .badge-col span {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .badge.locked + span {
+            color: #aaa;
+            font-weight: normal;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            background: var(--surface);
+            padding: 16px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80px;
+            background-color: var(--surface);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+            border-bottom-left-radius: 32px;
+            border-bottom-right-radius: 32px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            opacity: 0.5;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            opacity: 1;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            fill: currentColor;
+        }
+        
+        .nav-item span {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Toast */
+        .toast {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(255, 127, 80, 0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Scanner Screen */
+        .scanner-screen {
+            background-color: #1a1a1a;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 60px 24px;
+            color: white;
+        }
+
+        .scanner-box {
+            width: 250px;
+            height: 250px;
+            border: 4px solid var(--primary);
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .scanner-box:active {
+            transform: scale(0.95);
+        }
+        
+        .scanner-line {
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            position: absolute;
+            top: 0;
+            box-shadow: 0 0 10px var(--primary);
+            animation: scan 2.5s infinite linear;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+        
+        /* Responsive: Tablet+ */
+        @media (min-width: 481px) {
+            .header {
+                padding: 32px 32px 24px;
+            }
+            .missions-section {
+                padding: 24px 32px;
+            }
+            .profile-container {
+                padding: 40px 32px;
+            }
+        }
+
+        /* Responsive: Large phones / small tablets */
+        @media (min-width: 360px) and (max-width: 480px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            .achievements-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+            .badge {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+        }
+
+        /* Responsive: Small phones */
+        @media (max-width: 359px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            .missions-title {
+                font-size: 18px;
+            }
+            .mission-card {
+                padding: 12px;
+                flex-wrap: wrap;
+            }
+            .mission-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+                margin-right: 12px;
+            }
+            .btn-complete {
+                margin-top: 8px;
+                width: 100%;
+                text-align: center;
+            }
+            .achievements-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .stats-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            div[style*="width: 1px"] {
+                display: none;
+            }
+            .scanner-box {
+                width: 200px;
+                height: 200px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- DASHBOARD SCREEN -->
+        <div id="screen-dashboard" class="screen active">
+            <div class="header">
+                <h1>¡Hola, Estudiante!</h1>
+                <p>¿Listo para salir de tu zona de confort?</p>
+                
+                <div class="xp-container">
+                    <div class="xp-header">
+                        <span class="level-text">Nivel 2</span>
+                        <span class="xp-text"><span id="current-xp">150</span> / 500 XP</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="xp-bar" style="width: 30%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="missions-section">
+                <h2 class="missions-title">Misiones Diarias</h2>
+                
+                <div class="mission-card" id="mission-1">
+                    <div class="mission-icon">★</div>
+                    <div class="mission-info">
+                        <h3>Rompehielos</h3>
+                        <p>Saluda a un compañero que se siente a tu lado.</p>
+                        <div class="xp-reward">✨ +50 XP</div>
+                    </div>
+                    <button class="btn-complete" onclick="completeMission(1, 50)">Completar</button>
+                </div>
+                
+                <div class="mission-card completed">
+                    <div class="mission-icon">✓</div>
+                    <div class="mission-info">
+                        <h3>Explorador</h3>
+                        <p>Pregunta por una ubicación en el campus.</p>
+                        <div class="xp-reward">✨ +30 XP</div>
+                    </div>
+                </div>
+                
+                <div class="mission-card" id="mission-3">
+                    <div class="mission-icon">★</div>
+                    <div class="mission-info">
+                        <h3>Voz activa</h3>
+                        <p>Haz una pregunta durante la clase.</p>
+                        <div class="xp-reward">✨ +100 XP</div>
+                    </div>
+                    <button class="btn-complete" onclick="completeMission(3, 100)">Completar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCANNER SCREEN -->
+        <div id="screen-scanner" class="screen">
+            <div class="scanner-screen">
+                <h2 style="text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-size: 18px; line-height: 1.5;">Escanea códigos QR en el campus<br>para encontrar recompensas.</h2>
+                
+                <!-- Haz click aquí para simular que encontraste uno -->
+                <div class="scanner-box" onclick="simulateScan()">
+                    <div class="scanner-line"></div>
+                    <div style="color: rgba(255,255,255,0.2); font-size: 80px;">⛶</div>
+                </div>
+                
+                <div style="background: rgba(0,0,0,0.6); padding: 12px 24px; border-radius: 20px; font-size: 14px;">
+                    🔍 Buscando... (Haz click al recuadro)
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFILE SCREEN -->
+        <div id="screen-profile" class="screen">
+            <div class="profile-container">
+                <div class="avatar">👤</div>
+                <h2 class="profile-name">Carlos Estudiante</h2>
+                <p class="profile-title">Novato Nivel 2</p>
+                
+                <h3 class="section-title">Logros y Medallas</h3>
+                <div class="achievements-grid">
+                    <div class="badge-col">
+                        <div class="badge">💬</div>
+                        <span>Social</span>
+                    </div>
+                    <div class="badge-col">
+                        <div class="badge">🗺️</div>
+                        <span>Explora</span>
+                    </div>
+                    <div class="badge-col">
+                        <div class="badge">🎤</div>
+                        <span>Voz Alta</span>
+                    </div>
+                    <div class="badge-col">
+                        <div class="badge locked">🔒</div>
+                        <span>???</span>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Estadísticas Sociales</h3>
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div style="color:var(--primary); font-size: 24px; margin-bottom: 4px;">🚩</div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Misiones</div>
+                    </div>
+                    <div style="width: 1px; background: #eee;"></div>
+                    <div class="stat-item">
+                        <div style="color:var(--primary); font-size: 24px; margin-bottom: 4px;">🔥</div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Racha</div>
+                    </div>
+                    <div style="width: 1px; background: #eee;"></div>
+                    <div class="stat-item">
+                        <div style="color:var(--primary); font-size: 24px; margin-bottom: 4px;">👥</div>
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">Amigos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="navTo('dashboard', this)">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 22l10-3 10 3L12 2z"/></svg>
+                <span>Misiones</span>
+            </div>
+            <div class="nav-item" onclick="navTo('scanner', this)">
+                <svg viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h8v6h-8V3zm2 2v2h4V5h-4zM3 15h6v6H3v-6zm2 2v2h2v-2H5zm8-2h8v6h-8v-6zm2 2v2h4v-2h-4z"/></svg>
+                <span>Escanear</span>
+            </div>
+            <div class="nav-item" onclick="navTo('profile', this)">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <span>Perfil</span>
+            </div>
+        </div>
+
+        <!-- TOAST NOTIFICATION -->
+        <div id="toast" class="toast"></div>
+
+    </div>
+
+    <script>
+        let currentXp = 150;
+        const targetXp = 500;
+        let isScanning = false;
+
+        function navTo(screenName, el) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.getElementById('screen-' + screenName).classList.add('active');
+        }
+
+        function completeMission(id, xp) {
+            const card = document.getElementById('mission-' + id);
+            
+            card.classList.add('completed');
+            card.querySelector('.mission-icon').textContent = '✓';
+            card.querySelector('.btn-complete').style.display = 'none';
+
+            addXp(xp);
+            showToast(`¡Misión completada! +${xp} XP`);
+        }
+        
+        function addXp(amount) {
+            currentXp += amount;
+            document.getElementById('current-xp').textContent = currentXp;
+            
+            const percentage = Math.min((currentXp / targetXp) * 100, 100);
+            document.getElementById('xp-bar').style.width = percentage + '%';
+        }
+
+        function simulateScan() {
+            if (isScanning) return;
+            isScanning = true;
+            
+            showToast("¡Código encontrado! Logro: Explorador de Biblioteca. +50 XP");
+            
+            setTimeout(() => {
+                navTo('dashboard', document.querySelectorAll('.nav-item')[0]);
+                addXp(50);
+                isScanning = false;
+            }, 2500);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
