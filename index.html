@@ -995,6 +995,50 @@
         }
         .onboarding.show { display: flex; }
 
+        /* Ask name */
+        .ask-name {
+            position: fixed;
+            inset: 0;
+            z-index: 210;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(160deg, #0e1326 0%, #1c2a52 50%, #173b3a 100%);
+            color: #fff;
+            text-align: center;
+            padding: 0 28px;
+        }
+        .ask-name.show { display: flex; }
+        .ask-box { max-width: 320px; width: 100%; }
+        .ask-emoji { font-size: 72px; margin-bottom: 10px; animation: bounce 1.2s infinite; }
+        .ask-name h2 { font-size: 27px; font-weight: 800; color: var(--primary-light); margin-bottom: 8px; }
+        .ask-name p { color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 26px; }
+        .ask-input {
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.18);
+            border-radius: 16px;
+            padding: 15px 16px;
+            color: #fff;
+            font-size: 18px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 18px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .ask-input::placeholder { color: rgba(255,255,255,0.4); }
+        .ask-input:focus { border-color: var(--primary); }
+        .ask-input.shake { animation: askShake 0.4s; border-color: #ff6b6b; }
+        @keyframes askShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
+
         .ob-slide { animation: obfade 0.5s ease; max-width: 320px; }
         @keyframes obfade {
             0% { opacity: 0; transform: translateY(16px); }
@@ -1302,6 +1346,17 @@
                 <div class="avatar-grid" id="avatar-grid"></div>
                 <div class="color-row" id="color-row"></div>
                 <button class="btn-modal" onclick="closeAvatarPicker()">Listo</button>
+            </div>
+        </div>
+
+        <!-- ===== ASK NAME (al iniciar) ===== -->
+        <div class="ask-name" id="ask-name">
+            <div class="ask-box">
+                <div class="ask-emoji">👋</div>
+                <h2>¿Cómo te llamas?</h2>
+                <p>Identifícate para guardar tu progreso en la nube</p>
+                <input class="ask-input" id="ask-name-input" maxlength="22" placeholder="Tu nombre" onkeydown="if(event.key==='Enter')confirmName()">
+                <button class="btn-ob" onclick="confirmName()">Entrar 🚀</button>
             </div>
         </div>
 
@@ -1803,6 +1858,39 @@
             if (b) b.textContent = 'Ya giraste hoy ✓';
         }
 
+        /* ===== Ask name al iniciar ===== */
+        function showAskName() {
+            const i = document.getElementById('ask-name-input');
+            i.value = name;
+            i.classList.remove('shake');
+            document.getElementById('ask-name').classList.add('show');
+            setTimeout(() => { i.focus(); i.select(); }, 250);
+        }
+
+        function confirmName() {
+            const i = document.getElementById('ask-name-input');
+            const v = i.value.trim();
+            if (!v) {
+                i.classList.remove('shake');
+                void i.offsetWidth;
+                i.classList.add('shake');
+                sound('error');
+                return;
+            }
+            name = v;
+            document.getElementById('ask-name').classList.remove('show');
+            sound('success');
+            save();
+            renderAll();
+            const onboarded = localStorage.getItem('conectau-onboarded') === '1';
+            if (!onboarded) {
+                onboardingStep = 0;
+                onboardRender();
+                document.getElementById('onboarding').classList.add('show');
+                sound('tap');
+            }
+        }
+
         /* ===== Quiz ===== */
         function startQuiz() {
             sound('tap');
@@ -2202,13 +2290,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             load();
             renderAll();
-            loadFromCloud();
-            const onboarded = localStorage.getItem('conectau-onboarded') === '1';
-            if (!onboarded) {
-                onboardingStep = 0;
-                onboardRender();
-                onboardShow();
-            }
+            loadFromCloud().then(() => {
+                renderAll();
+                showAskName();
+            });
         });
     </script>
 </body>
