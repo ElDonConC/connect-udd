@@ -1227,7 +1227,7 @@
             <div class="profile-container">
                 <div class="avatar" id="avatar-display" onclick="openAvatarPicker()">👤</div>
                 <div class="avatar-hint">Toca el avatar para cambiarlo</div>
-                <input class="name-input" id="name-input" value="Carlos Estudiante" onchange="saveName(this.value)" maxlength="22">
+                <input class="name-input" id="name-input" value="" placeholder="Tu nombre" onchange="saveName(this.value)" maxlength="22">
                 <p class="profile-title" id="profile-title">Novato Nivel 2</p>
 
                 <h3 class="section-title">Logros y Medallas</h3>
@@ -1402,7 +1402,7 @@
         let week = [40, 80, 0, 120, 60, 0, 0];
         let owned = [];
         let avatar = { emoji: '👤', color: '#48C9B0' };
-        let name = 'Carlos Estudiante';
+        let name = '';
         let email = '';
         let passwordHash = '';
         let daily = {};
@@ -2292,7 +2292,18 @@
             renderAll();
             loadFromCloud().then(() => {
                 renderAll();
-                showAskName();
+                const hasName = ((name || '').trim() && (name || '').trim() !== 'Carlos Estudiante');
+                const onboarded = localStorage.getItem('conectau-onboarded') === '1';
+                if (hasName) {
+                    if (!onboarded) {
+                        onboardingStep = 0;
+                        onboardRender();
+                        document.getElementById('onboarding').classList.add('show');
+                    }
+                    sound('success');
+                } else {
+                    showAskName();
+                }
             });
         });
     </script>
