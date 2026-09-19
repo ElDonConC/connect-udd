@@ -658,6 +658,54 @@
             font-family: inherit;
         }
 
+        /* Account cloud card */
+        .account-card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 20px;
+            padding: 18px;
+            margin-top: 24px;
+            text-align: left;
+        }
+        .account-card h3 { color: #fff; font-size: 16px; margin-bottom: 4px; }
+        .account-card p { color: rgba(255,255,255,0.6); font-size: 12px; line-height: 1.5; margin-bottom: 12px; }
+        .account-input {
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 11px 14px;
+            color: #fff;
+            font-size: 13px;
+            margin-bottom: 10px;
+            outline: none;
+            font-family: inherit;
+        }
+        .account-input::placeholder { color: rgba(255,255,255,0.45); }
+        .account-input:focus { border-color: var(--primary); }
+        .account-actions { display: flex; gap: 10px; margin-top: 2px; }
+        .account-btn {
+            flex: 1;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: transform 0.2s;
+        }
+        .account-btn.accent { background: var(--accent); }
+        .account-btn:hover { transform: scale(1.03); }
+        .account-status {
+            margin-top: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+        }
+
         /* ===== Scanner ===== */
         .scanner-screen {
             background-color: #1a1a1a;
@@ -1167,6 +1215,18 @@
                     </div>
                 </div>
 
+                <div class="account-card">
+                    <h3>☁️ Cuenta en la nube</h3>
+                    <p>Tu progreso se sincroniza automáticamente. Los datos se guardan cifrados.</p>
+                    <input class="account-input" id="email-input" type="email" placeholder="Tu correo (opcional)" value="">
+                    <input class="account-input" id="password-input" type="password" placeholder="Tu contraseña (opcional, se cifra)" value="">
+                    <div class="account-actions">
+                        <button class="account-btn" onclick="saveEmailValue(document.getElementById('email-input').value)">Guardar correo</button>
+                        <button class="account-btn accent" onclick="savePasswordValue(document.getElementById('password-input').value)">Guardar contraseña</button>
+                    </div>
+                    <div class="account-status" id="cloud-status">☁️ pendiente</div>
+                </div>
+
                 <button class="replay-link" onclick="replayOnboarding()">Ver bienvenida otra vez</button>
             </div>
         </div>
@@ -1275,6 +1335,9 @@
 
     </div>
 
+    <!-- ===== Supabase ===== -->
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script>
         const TARGET_XP = 500;
         const LEVEL_NAMES = ['', 'Novato', 'Explorador', 'Conector', 'Atrevido', 'Líder', 'Campeón'];
@@ -1285,6 +1348,8 @@
         let owned = [];
         let avatar = { emoji: '👤', color: '#48C9B0' };
         let name = 'Carlos Estudiante';
+        let email = '';
+        let passwordHash = '';
         let daily = {};
         let quizIndex = 0, quizScore = 0, quizAnswered = false;
         let rouletteIndex = 0, rouletteSpinning = false, rouletteLast = 0;
@@ -1366,6 +1431,9 @@
                 const nm = localStorage.getItem('conectau-name');
                 if (nm) name = nm;
 
+                email = localStorage.getItem('conectau-email') || '';
+                passwordHash = localStorage.getItem('conectau-password-hash') || '';
+
                 daily = JSON.parse(localStorage.getItem('conectau-daily-' + todayKey()) || '{}');
             } catch (e) {}
         }
@@ -1379,11 +1447,143 @@
                 localStorage.setItem('conectau-owned', JSON.stringify(owned));
                 localStorage.setItem('conectau-avatar', JSON.stringify(avatar));
                 localStorage.setItem('conectau-name', name);
+                localStorage.setItem('conectau-email', email);
+                if (passwordHash) localStorage.setItem('conectau-password-hash', passwordHash);
                 localStorage.setItem('conectau-daily-' + todayKey(), JSON.stringify(daily));
             } catch (e) {}
+            syncToCloud();
         }
 
         function totalXp() { return (level - 1) * TARGET_XP + currentXp; }
+
+        /* ===== Supabase (sin login · anon key + local_id) ===== */
+        const SUPABASE_URL = 'https://rpynxlglwnkcqvoyrosp.supabase.co';
+        const SUPABASE_ANON_KEY = 'PON_AQUI_TU_ANON_KEY';
+        let sb = null;
+        let cloudState = 'off'; // off | ok | error
+
+        function getSb() {
+            if (sb) return sb;
+            if (!window.supabase || SUPABASE_ANON_KEY.indexOf('PON_AQUI') === 0) return null;
+            try { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch (e) { sb = null; }
+            return sb;
+        }
+
+        function localId() {
+            let id = localStorage.getItem('conectau-id');
+            if (!id) {
+                id = 'u-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+                localStorage.setItem('conectau-id', id);
+            }
+            return id;
+        }
+
+        function setCloudState(s) {
+            cloudState = s;
+            const el = document.getElementById('cloud-status');
+            if (!el) return;
+            if (s === 'ok') { el.textContent = '☁️ sincronizado'; el.style.color = '#48C9B0'; }
+            else if (s === 'error') { el.textContent = '☁️ sin conexión'; el.style.color = '#FF7F50'; }
+            else { el.textContent = '☁️ pendiente'; el.style.color = 'rgba(255,255,255,0.5)'; }
+        }
+
+        function unlockedList() {
+            try { return JSON.parse(localStorage.getItem('conectau-unlocked') || '[]'); }
+            catch (e) { return []; }
+        }
+
+        async function hashPassword(pw) {
+            if (!pw) return '';
+            if (!window.crypto || !crypto.subtle) return '';
+            try {
+                const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('conectau-' + pw));
+                return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+            } catch (e) { return ''; }
+        }
+
+        function buildCloudPayload() {
+            return {
+                local_id: localId(),
+                name: name,
+                email: email || null,
+                password_hash: passwordHash || null,
+                xp: currentXp,
+                level: level,
+                streak: streak,
+                missions_done: missionsDone,
+                scans: scans,
+                bonus_used: bonusUsed,
+                avatar: avatar,
+                achievements: unlockedList(),
+                owned_items: owned,
+                week_activity: week,
+                daily: daily
+            };
+        }
+
+        function applyCloudRow(row) {
+            if (!row) return false;
+            if (typeof row.name === 'string' && row.name) name = row.name;
+            if (typeof row.email === 'string') email = row.email;
+            if (typeof row.password_hash === 'string') passwordHash = row.password_hash;
+            if (typeof row.xp === 'number') currentXp = row.xp;
+            if (typeof row.level === 'number') level = row.level;
+            if (typeof row.streak === 'number') streak = row.streak;
+            if (typeof row.missions_done === 'number') missionsDone = row.missions_done;
+            if (typeof row.scans === 'number') scans = row.scans;
+            if (typeof row.bonus_used === 'boolean') bonusUsed = row.bonus_used;
+            if (row.avatar && typeof row.avatar === 'object') avatar = row.avatar;
+            if (Array.isArray(row.achievements)) {
+                try { localStorage.setItem('conectau-unlocked', JSON.stringify(row.achievements)); } catch (e) {}
+            }
+            if (Array.isArray(row.owned_items)) owned = row.owned_items;
+            if (Array.isArray(row.week_activity) && row.week_activity.length === 7) week = row.week_activity;
+            if (row.daily && typeof row.daily === 'object') daily = row.daily;
+            return true;
+        }
+
+        async function syncToCloud() {
+            const client = getSb();
+            if (!client) { setCloudState('off'); return; }
+            try {
+                const { error } = await client.from('users').upsert(buildCloudPayload(), { onConflict: 'local_id' });
+                if (error) { setCloudState('error'); }
+                else setCloudState('ok');
+            } catch (e) { setCloudState('error'); }
+        }
+
+        async function loadFromCloud() {
+            const client = getSb();
+            if (!client) return;
+            try {
+                const { data, error } = await client.from('users').select('*').eq('local_id', localId()).maybeSingle();
+                if (error) { setCloudState('error'); return; }
+                if (data) {
+                    if (applyCloudRow(data)) {
+                        renderAll();
+                        save();
+                        setCloudState('ok');
+                        showToast('☁️ Progreso cargado desde la nube');
+                    }
+                } else {
+                    syncToCloud();
+                }
+            } catch (e) { setCloudState('error'); }
+        }
+
+        async function saveEmailValue(v) {
+            email = (v || '').trim();
+            save();
+            showToast(email ? 'Correo guardado en la nube ☁️' : 'Correo vacío');
+        }
+
+        async function savePasswordValue(v) {
+            if (!v) { showToast('No se guardó contraseña vacía'); return; }
+            passwordHash = await hashPassword(v);
+            save();
+            sound('coin');
+            showToast('🔐 Contraseña cifrada y guardada');
+        }
 
         /* ===== Sound (Web Audio) ===== */
         let audioCtx = null;
@@ -1879,6 +2079,11 @@
 
             document.getElementById('sound-toggle').textContent = audioOn ? '🔊' : '🔇';
 
+            const ei = document.getElementById('email-input');
+            if (ei && document.activeElement !== ei) ei.value = email;
+            const pi = document.getElementById('password-input');
+            if (pi) pi.value = '';
+
             toastStatusBonus();
             renderMissions();
             renderRanking();
@@ -1997,6 +2202,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             load();
             renderAll();
+            loadFromCloud();
             const onboarded = localStorage.getItem('conectau-onboarded') === '1';
             if (!onboarded) {
                 onboardingStep = 0;
