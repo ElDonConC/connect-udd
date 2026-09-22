@@ -1,69 +1,68 @@
-# ConectaU - Prototipo de Intervención Psicológica Gamificada
+# ConectaU
+### Una app para que los estudiantes nuevos se sientan parte de su universidad
 
-Aplicación web responsive que promueve el **sentido de pertenencia** en estudiantes de primer año de la Universidad del Desarrollo (UDD) mediante misiones sociales, gamificación interactiva, mini-juegos y un sistema de recompensas.
+ConectaU es un proyecto de la **Facultad de Psicología de la Universidad del Desarrollo (UDD)**. Nace de una idea simple: que llegar a la universidad no se sienta como llegar a un lugar desconocido, sino como empezar a **formar parte de una comunidad**.
 
-> Conecta · Participa · Pertenece
+Para lograrlo, la app propone **misiones sociales reales**: saludar a alguien que no conoces, hacer una pregunta en clases, invitar a alguien a un café, formar un grupo de estudio… con la idea de que las personas se conecten entre sí de forma frecuente y positiva.
 
-## 📱 Descripción
+**Conecta · Participa · Pertenece**
 
-ConectaU es una app gamificada que propone misiones sociales reales para estudiantes de reciente ingreso. A través de retos diarios, escaneo de códigos QR en el campus y recompensas (XP, niveles y medallas), los estudiantes construyen vínculos estables e interacciones frecuentes y positivas, fortaleciendo su pertenencia universitaria.
+---
 
-Proyecto académico del curso *Herramientas Tecnológicas, Innovación y Creatividad 5* — Facultad de Psicología, UDD.
+## ¿Para quién es?
 
-## ✨ Funcionalidades
+Para **estudiantes que están recién ingresando** a la universidad y quieren sentirse acompañados y parte de algo. La app funciona como un juego: cada reto completado entrega puntos, los puntos te hacen subir de nivel, y los niveles se muestran en un ranking semanal con tus compañeros.
 
-- **Misiones diarias rotativas**: 3 retos sociales frescos cada día, generados por hash de fecha.
-- **Sistema de niveles**: 500 XP por nivel, con modal de celebración y nombres por rango (Novato → Campeón).
-- **Escáner QR simulado**: explora el campus y descubre logros aleatorios.
-- **Ruleta de la Suerte**: gira para ganar 30-150 XP aleatorios (una vez al día).
-- **Quiz Social**: 6 preguntas de pertenencia universitaria, hasta +120 XP.
-- **Ranking semanal**: tabla de competencia con amigos y tu posición, barras animadas.
-- **Tienda de recompensas**: canjea XP por premios digitales (temas, insignias, coronas).
-- **Avatar personalizable**: elige tu emoji y color de perfil.
-- **Gráfico semanal**: barras de actividad de 7 días que crecen en tiempo real.
-- **Sistema de logros**: 4 medallas desbloqueables (Social, Explora, Voz Alta, Misterio).
-- **Efectos de sonido**: Web Audio API con tonos para éxito, errores, monedas y celebraciones.
-- **Onboarding**: guía de bienvenida de 3 pasos al abrir la app por primera vez.
-- **Racha diaria**: contador de días consecutivos activos.
-- **Persistencia local**: el progreso se guarda en el navegador (localStorage).
-- **Responsive**: funciona en móvil, tablet y escritorio.
+La idea de fondo viene de la psicología: el sentido de pertenencia (la sensación de "esto también es mío") se construye con vínculos estables e interacciones frecuentes y positivas. ConectaU busca justamente eso.
 
-## 🚀 Demo en línea
+---
 
-Publicada en GitHub Pages:
+## ¿Qué puedo hacer en la app?
 
-- **URL**: https://eldonconc.github.io/connect-udd/
-- **Repositorio**: https://github.com/ElDonConC/connect-udd
+- **Misiones diarias**: cada día aparecen 3 retos sociales diferentes para hacer.
+- **Puntos y niveles**: cada reto te da XP; con XP subes de nivel (de Novato a Campeón).
+- **Ranking semanal**: ves tu posición en la tabla junto a tus compañeros.
+- **Ruleta de la suerte**: una vez al día puedes girar para ganar puntos extra.
+- **Quiz social**: respondes preguntas sobre la vida universitaria y ganas XP.
+- **Códigos QR en el campus**: escaneas códigos escondidos y descubres logros.
+- **Tienda de premios**: cambias tus puntos por cosas divertidas (insignias, coronas, temas).
+- **Tu avatar**: eliges el emoji y color que te representan.
+- **Racha diaria**: si vuelves cada día, sumas racha y lo ves en tu perfil.
+- **Tu progreso viaja contigo**: si entras al mismo navegador, tu avance se guarda en la nube y se recupera automáticamente.
 
-## 🛠️ Tecnologías
+---
 
-- HTML5
-- CSS3 (variables, flexbox, grid, media queries, animaciones, conic-gradient)
-- JavaScript (sin dependencias externas, Web Audio API, localStorage)
+## ¿Dónde puedo verla?
 
-## 📂 Estructura
+La app está publicada en internet, se abre con cualquier navegador (idealmente el celular):
 
-```
-.
-├── index.html            # App completa (HTML + CSS + JS)
-├── psicologia-logo.png   # Logo de la Facultad de Psicología
-└── README.md
-```
+**https://eldonconc.github.io/connect-udd/**
 
-## 🔧 Uso local
+No hay que instalar nada. Solo abrir el enlace y empezar.
 
-Abre `index.html` en cualquier navegador moderno. No requiere instalación ni servidor.
+---
 
-```bash
-open index.html
-```
+## ¿Qué necesita para funcionar?
 
-## 📝 Creditos
+Nada especial. Funciona en celulares, tablets y computadores. Guarda el progreso de cada persona en su propio navegador y, además, lo sincroniza con una nube para que no se pierda entre sesiones.
 
-- **Asignatura**: Herramientas Tecnológicas, Innovación y Creatividad 5
+*(Detalle técnico, en simple: la página está publicada en GitHub Pages y los datos se guardan en Supabase, un servicio gratuito de bases de datos. No se requiere ningún pago ni servidor propio.)*
+
+---
+
+## El equipo
+
+Proyecto del curso *Herramientas Tecnológicas, Innovación y Creatividad 5* de la Facultad de Psicología de la UDD.
+
 - **Docente**: Claudia Pizarro C.
 - **Integrantes**: Matilda Benítez, Carolina Velásquez y Amanda Wolff
 
-## 📚 Fundamentación
+---
 
-La pertenencia es una motivación humana fundamental basada en vínculos estables e interacciones frecuentes y positivas (Baumeister & Leary, 1995). En estudiantes de reciente ingreso, el sentido de pertenencia se relaciona inversamente con la intención de abandono universitario (Rojas Retamal et al., 2024). ConectaU aborda este problema con mecánicas de gamificación: **Conoce → Conecta → Comparte → Pertenece**.
+## ¿Quieres probar o modificar el proyecto?
+
+Si eres parte del grupo, el código vive en este repositorio:
+
+**https://github.com/ElDonConC/connect-udd**
+
+Si solo quieres usarla o mostrarla, no necesitas tocar nada: abre el enlace de arriba y listo.
